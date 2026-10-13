@@ -1,0 +1,112 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C4 heatmap: share of adults who attended each type of cultural venue in the past 12 months, by household income group or by education level, ABS 2021-22.",
+  "title": {
+    "text": "Libraries are the only cultural venue used equally by rich and poor",
+    "subtitle": [
+      "% of adults who attended in the past 12 months, 2021–22. Darker = more people attended.",
+      "The right-hand column shows how many times more likely the top group is to attend than the bottom group."
+    ]
+  },
+  "data": {
+    "url": "data/abs_venue_attendance.csv",
+    "format": { "type": "csv", "parse": { "order": "number", "rate": "number" } }
+  },
+  "params": [
+    {
+      "name": "breakdown",
+      "value": "Income",
+      "bind": { "input": "radio", "options": ["Income", "Education"], "name": "Compare by " }
+    }
+  ],
+  "transform": [
+    { "filter": "datum.breakdown === breakdown" },
+    {
+      "window": [
+        { "op": "first_value", "field": "rate", "as": "bottom" },
+        { "op": "last_value", "field": "rate", "as": "top" }
+      ],
+      "groupby": ["venue"],
+      "sort": [{ "field": "order" }],
+      "frame": [null, null]
+    },
+    { "calculate": "datum.top / datum.bottom", "as": "ratio" },
+    {
+      "calculate": "datum.venue === 'Libraries' && breakdown === 'Income' ? '1.1× — almost no gap' : format(datum.ratio, '.1f') + '×'",
+      "as": "ratio_label"
+    }
+  ],
+  "width": "container",
+  "height": { "step": 44 },
+  "encoding": {
+    "y": {
+      "field": "venue",
+      "type": "nominal",
+      "title": null,
+      "sort": { "field": "ratio", "op": "max", "order": "ascending" },
+      "axis": {
+        "domain": false,
+        "ticks": false,
+        "labelPadding": 10,
+        "labelFontSize": 13,
+        "labelColor": "#1f2328",
+        "labelFontWeight": { "condition": { "test": "datum.value === 'Libraries'", "value": 700 }, "value": 400 }
+      }
+    },
+    "x": {
+      "field": "group",
+      "type": "ordinal",
+      "title": null,
+      "sort": { "field": "order", "op": "min" },
+      "axis": {
+        "orient": "top",
+        "domain": false,
+        "ticks": false,
+        "labelAngle": 0,
+        "labelPadding": 8,
+        "labelColor": "#1f2328",
+        "labelExpr": "{'Lowest': 'Lowest income', 'Second': 'Lower-middle', 'Third': 'Middle', 'Fourth': 'Upper-middle', 'Highest': 'Highest income', 'Year 10 or below': ['Year 10', 'or below'], 'Graduate diploma': ['Graduate', 'diploma']}[datum.value] || datum.value"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": { "type": "rect", "stroke": "#faf7f2", "strokeWidth": 2 },
+      "encoding": {
+        "color": {
+          "field": "rate",
+          "type": "quantitative",
+          "scale": { "domain": [0, 60], "range": ["#f1f5f4", "#9cc3c8", "#4f8590", "#1d4e5f", "#0f3440"] },
+          "legend": null
+        },
+        "tooltip": [
+          { "field": "venue", "title": "Venue" },
+          { "field": "group", "title": "Group" },
+          { "field": "rate", "title": "Attended (%)", "format": ".1f" }
+        ]
+      }
+    },
+    {
+      "mark": { "type": "text", "fontSize": 13, "fontWeight": 600 },
+      "encoding": {
+        "text": { "field": "rate", "type": "quantitative", "format": ".0f" },
+        "color": { "condition": { "test": "datum.rate > 27", "value": "#ffffff" }, "value": "#1f2328" }
+      }
+    },
+    {
+      "transform": [{ "filter": "datum.venue === 'Libraries' && datum.order === 0" }],
+      "mark": { "type": "rect", "fillOpacity": 0, "stroke": "#1f2328", "strokeWidth": 2.5 },
+      "encoding": { "x": { "value": 0 }, "x2": { "value": "width" } }
+    },
+    {
+      "transform": [{ "filter": "datum.order === 0" }],
+      "mark": { "type": "text", "align": "left", "dx": 14, "fontSize": 13, "fontWeight": 700, "color": "#1f2328" },
+      "encoding": { "x": { "value": "width" }, "text": { "field": "ratio_label" } }
+    },
+    {
+      "data": { "values": [{ "label": "Top ÷ bottom" }] },
+      "mark": { "type": "text", "align": "left", "baseline": "bottom", "dx": 14, "fontSize": 12, "color": "#555b63" },
+      "encoding": { "x": { "value": "width" }, "y": { "value": -8 }, "text": { "field": "label" } }
+    }
+  ]
+}

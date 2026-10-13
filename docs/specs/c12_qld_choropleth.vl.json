@@ -1,0 +1,305 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C12 choropleth of Queensland councils (program attendance, visits or digital loans per resident, 2024-25), linked to a scatterplot of digital loans against program attendance per resident. Clicking a council highlights it in both views.",
+  "title": { "text": "In the bush, the library is the town's meeting place", "subtitle": "Queensland councils, 2024–25, per resident. Choose what the map shows; click a council to find it in both views (double-click to clear)." },
+  "params": [
+    {
+      "name": "measure",
+      "value": "Program attendance",
+      "bind": {
+        "input": "select",
+        "options": ["Program attendance", "Library visits", "Digital loans"],
+        "name": "Map shows "
+      }
+    },
+    {
+      "name": "pick",
+      "select": {
+        "type": "point",
+        "fields": ["council"],
+        "on": "click",
+        "clear": "dblclick"
+      },
+      "views": ["qld_map", "qld_points"]
+    }
+  ],
+  "spacing": 40,
+  "resolve": {
+    "scale": { "color": "independent", "size": "independent" },
+    "legend": { "color": "independent" }
+  },
+  "hconcat": [
+    {
+      "width": 480,
+      "height": 520,
+      "projection": {
+        "type": "conicEqualArea",
+        "parallels": [-18, -36],
+        "rotate": [-132, 0]
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "data/geo/qld_lga.geojson",
+            "format": { "type": "json", "property": "features" }
+          },
+          "mark": { "type": "geoshape", "fill": "#e4ddd2", "stroke": "#faf7f2", "strokeWidth": 0.5 }
+        },
+        {
+          "name": "qld_map",
+          "data": {
+            "url": "data/geo/qld_lga.geojson",
+            "format": { "type": "json", "property": "features" }
+          },
+          "transform": [
+            {
+              "lookup": "properties.name",
+              "from": {
+                "data": {
+                  "url": "data/qld_council_measures.csv",
+                  "format": {
+                    "type": "csv",
+                    "parse": { "population": "number", "visits_pr": "number", "programs_pr": "number", "digital_pr": "number" }
+                  }
+                },
+                "key": "lga_name",
+                "fields": ["council", "group", "population", "visits_pr", "programs_pr", "digital_pr"]
+              }
+            },
+            { "filter": "isValid(datum.council)" },
+            { "calculate": "measure === 'Library visits' ? datum.visits_pr : measure === 'Digital loans' ? datum.digital_pr : datum.programs_pr", "as": "value" },
+            {
+              "window": [
+                { "op": "ntile", "param": 5, "as": "fifth" }
+              ],
+              "sort": [
+                { "field": "value", "order": "ascending" }
+              ]
+            },
+            {
+              "calculate": "['Lowest fifth', 'Second fifth', 'Middle fifth', 'Fourth fifth', 'Highest fifth'][datum.fifth - 1]",
+              "as": "fifth_label"
+            }
+          ],
+          "mark": { "type": "geoshape" },
+          "encoding": {
+            "color": {
+              "field": "fifth_label",
+              "type": "ordinal",
+              "scale": {
+                "domain": ["Lowest fifth", "Second fifth", "Middle fifth", "Fourth fifth", "Highest fifth"],
+                "range": ["#d4e6e7", "#9cc3c8", "#4f8590", "#1d4e5f", "#0f3440"]
+              },
+              "legend": { "title": "Councils ranked from lowest to highest on the chosen measure", "orient": "bottom", "direction": "horizontal", "symbolType": "square", "symbolSize": 160, "titleLimit": 420, "columns": 5, "columnPadding": 10 }
+            },
+            "stroke": {
+              "condition": { "param": "pick", "empty": false, "value": "#d08a2e" },
+              "value": "#faf7f2"
+            },
+            "strokeWidth": {
+              "condition": { "param": "pick", "empty": false, "value": 3 },
+              "value": 0.5
+            },
+            "tooltip": [
+              { "field": "council", "title": "Council" },
+              { "field": "fifth_label", "title": "Rank on chosen measure" },
+              { "field": "group", "title": "Library service" },
+              { "field": "programs_pr", "title": "Program attendance per resident", "format": ".2f" },
+              { "field": "visits_pr", "title": "Visits per resident", "format": ".1f" },
+              { "field": "digital_pr", "title": "Digital loans per resident", "format": ".2f" }
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              { "lon": 153.03, "lat": -27.47, "label": "Brisbane", "align": "right" },
+              { "lon": 143.04, "lat": -22.39, "label": "Winton", "align": "left" }
+            ]
+          },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          },
+          "layer": [
+            {
+              "mark": { "type": "circle", "size": 18, "color": "#1f2328" },
+              "encoding": { "text": null }
+            },
+            {
+              "transform": [
+                { "filter": "datum.align === 'right'" }
+              ],
+              "mark": { "type": "text", "align": "right", "dx": -8, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328", "stroke": "#faf7f2", "strokeWidth": 3 }
+            },
+            {
+              "transform": [
+                { "filter": "datum.align === 'right'" }
+              ],
+              "mark": { "type": "text", "align": "right", "dx": -8, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328" }
+            },
+            {
+              "transform": [
+                { "filter": "datum.align === 'left'" }
+              ],
+              "mark": { "type": "text", "align": "left", "dx": 8, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328", "stroke": "#faf7f2", "strokeWidth": 3 }
+            },
+            {
+              "transform": [
+                { "filter": "datum.align === 'left'" }
+              ],
+              "mark": { "type": "text", "align": "left", "dx": 8, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328" }
+            }
+          ]
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "label": ["Grey areas: no data", "(council not in the survey)"]
+              }
+            ]
+          },
+          "mark": { "type": "text", "align": "left", "baseline": "top", "fontSize": 12, "lineHeight": 14, "color": "#555b63" },
+          "encoding": {
+            "x": { "value": 0 },
+            "y": { "value": 6 },
+            "text": { "field": "label" }
+          }
+        }
+      ]
+    },
+    {
+      "width": 400,
+      "height": 420,
+      "title": { "text": "Rural councils: more programs, fewer digital loans", "subtitle": "Each circle is a council, sized by population", "fontSize": 14, "font": "Source Sans 3", "fontWeight": 700, "subtitleFontSize": 12 },
+      "data": {
+        "url": "data/qld_council_measures.csv",
+        "format": {
+          "type": "csv",
+          "parse": { "population": "number", "program_attendance": "number", "digital_loans": "number", "visits_pr": "number", "programs_pr": "number", "digital_pr": "number" }
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "digital_pr",
+          "type": "quantitative",
+          "title": "Digital loans per resident",
+          "scale": {
+            "domain": [0, 3]
+          },
+          "axis": { "tickCount": 4, "domainColor": "#ddd5c8" }
+        },
+        "y": {
+          "field": "programs_pr",
+          "type": "quantitative",
+          "title": "Program attendance per resident",
+          "scale": {
+            "domain": [0, 5]
+          },
+          "axis": { "tickCount": 5, "domain": false, "ticks": false }
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Rural Libraries Queensland", "Runs its own library service"],
+            "range": ["#5b7f3a", "#8a9bb0"]
+          },
+          "legend": { "title": null, "orient": "bottom", "direction": "vertical" }
+        }
+      },
+      "layer": [
+        {
+          "name": "qld_points",
+          "mark": { "type": "circle", "stroke": "#faf7f2", "strokeWidth": 0.8 },
+          "encoding": {
+            "size": {
+              "field": "population",
+              "type": "quantitative",
+              "scale": {
+                "range": [20, 1200]
+              },
+              "legend": null
+            },
+            "opacity": {
+              "condition": { "param": "pick", "empty": true, "value": 0.85 },
+              "value": 0.15
+            },
+            "tooltip": [
+              { "field": "council", "title": "Council" },
+              { "field": "group", "title": "Library service" },
+              { "field": "population", "title": "Population", "format": "," },
+              { "field": "programs_pr", "title": "Program attendance per resident", "format": ".2f" },
+              { "field": "digital_pr", "title": "Digital loans per resident", "format": ".2f" }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "aggregate": [
+                { "op": "sum", "field": "program_attendance", "as": "programs" },
+                { "op": "sum", "field": "digital_loans", "as": "digital" },
+                { "op": "sum", "field": "population", "as": "population" }
+              ],
+              "groupby": ["group"]
+            },
+            { "calculate": "datum.programs / datum.population", "as": "programs_pr" },
+            { "calculate": "datum.digital / datum.population", "as": "digital_pr" },
+            { "calculate": "datum.group === 'Rural Libraries Queensland' ? 'All rural councils' : 'All other councils'", "as": "label" }
+          ],
+          "layer": [
+            {
+              "mark": { "type": "point", "shape": "diamond", "filled": true, "size": 220, "stroke": "#1f2328", "strokeWidth": 1.5, "opacity": 1 }
+            },
+            {
+              "layer": [
+                {
+                  "mark": { "type": "text", "align": "left", "dx": 12, "dy": -14, "fontSize": 12.5, "fontWeight": 700, "stroke": "#faf7f2", "strokeWidth": 3 }
+                },
+                {
+                  "mark": { "type": "text", "align": "left", "dx": 12, "dy": -14, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328" }
+                }
+              ],
+              "encoding": {
+                "text": { "field": "label" },
+                "color": { "value": "#1f2328" }
+              }
+            }
+          ]
+        },
+        {
+          "transform": [
+            {
+              "filter": "indexof(['Winton Shire', 'Boulia Shire'], datum.council) >= 0"
+            },
+            {
+              "calculate": "datum.council === 'Winton Shire' ? 'Winton: ' + format(datum.programs_pr, '.1f') + ' program attendances per resident' : ['Boulia: most digital', 'loans per resident']",
+              "as": "label"
+            }
+          ],
+          "encoding": {
+            "text": { "field": "label" },
+            "color": { "value": "#1f2328" }
+          },
+          "layer": [
+            {
+              "transform": [
+                { "filter": "datum.council === 'Winton Shire'" }
+              ],
+              "mark": { "type": "text", "align": "left", "dx": 10, "fontSize": 12.5, "color": "#1f2328" }
+            },
+            {
+              "transform": [
+                { "filter": "datum.council === 'Boulia Shire'" }
+              ],
+              "mark": { "type": "text", "align": "right", "dx": -10, "dy": -8, "fontSize": 12.5, "lineHeight": 15, "color": "#1f2328" }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

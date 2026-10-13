@@ -1,0 +1,21 @@
+id,parent,name,group,loans,total,share
+root,,All loans,,,35211476,1.0
+Children's & teen books,root,Children's & teen books,Children's & teen books,,14516217,0.4123
+Adult books,root,Adult books,Adult books,,11305667,0.3211
+Digital,root,Digital,Digital,,6292647,0.1787
+Other items,root,Other items,Other items,,3096945,0.088
+Picture books,Children's & teen books,Picture books,Children's & teen books,6068560.0,6068560,0.1723
+Junior fiction,Children's & teen books,Junior fiction,Children's & teen books,5861698.0,5861698,0.1665
+Junior non-fiction,Children's & teen books,Junior non-fiction,Children's & teen books,1603568.0,1603568,0.0455
+Young adult,Children's & teen books,Young adult,Children's & teen books,982391.0,982391,0.0279
+Adult fiction,Adult books,Adult fiction,Adult books,7748236.0,7748236,0.22
+Adult non-fiction,Adult books,Adult non-fiction,Adult books,3557431.0,3557431,0.101
+E-audiobooks,Digital,E-audiobooks,Digital,3333083.0,3333083,0.0947
+E-books,Digital,E-books,Digital,2827512.0,2827512,0.0803
+Digital music,Digital,Digital music,Digital,132052.0,132052,0.0038
+DVDs and film,Other items,DVDs and film,Other items,2216490.0,2216490,0.0629
+CD audiobooks,Other items,CD audiobooks,Other items,339407.0,339407,0.0096
+Music CDs,Other items,Music CDs,Other items,189268.0,189268,0.0054
+Toys and games,Other items,Toys and games,Other items,183493.0,183493,0.0052
+Language kits,Other items,Language kits,Other items,43759.0,43759,0.0012
+Other,Other items,Other,Other items,124528.0,124528,0.0035

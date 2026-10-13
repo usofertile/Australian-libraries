@@ -1,0 +1,168 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C6 proportional symbol map of NSW public library loans by council, 2024-25, with a Greater Sydney inset. Circle area = total loans; colour = loans per resident.",
+  "title": {
+    "text": "Borrowing per person varies more than ten-fold across NSW",
+    "subtitle": "Library loans by council, 2024–25. Circle size = total loans; colour = loans per resident."
+  },
+  "spacing": 24,
+  "resolve": { "scale": { "size": "shared", "color": "shared" } },
+  "hconcat": [
+    {
+      "width": 520,
+      "height": 420,
+      "projection": { "type": "conicEqualArea", "parallels": [-18, -36], "rotate": [-132, 0] },
+      "layer": [
+        {
+          "data": { "url": "data/geo/nsw_lga.geojson", "format": { "type": "json", "property": "features" } },
+          "mark": { "type": "geoshape", "fill": "#ece6dc", "stroke": "#faf7f2", "strokeWidth": 0.6 }
+        },
+        {
+          "data": {
+            "url": "data/nsw_council_loans.csv",
+            "format": { "type": "csv", "parse": { "population": "number", "loans": "number", "loans_per_resident": "number", "lon": "number", "lat": "number" } }
+          },
+          "mark": { "type": "circle", "stroke": "#faf7f2", "strokeWidth": 0.7, "opacity": 0.92 },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "size": {
+              "field": "loans",
+              "type": "quantitative",
+              "scale": { "domain": [0, 1700000], "range": [0, 1100] },
+              "legend": {
+                "title": "Total loans",
+                "orient": "bottom",
+                "values": [100000, 500000, 1500000],
+                "labelExpr": "datum.value >= 1e6 ? format(datum.value / 1e6, '.1f') + 'M' : format(datum.value / 1e3, '.0f') + 'k'",
+                "symbolFillColor": "#9cc3c8",
+                "symbolStrokeColor": "#1d4e5f"
+              }
+            },
+            "color": {
+              "field": "loans_per_resident",
+              "type": "quantitative",
+              "scale": { "type": "threshold", "domain": [2, 4, 6, 8], "range": ["#e3eeee", "#9cc3c8", "#4f8590", "#1d4e5f", "#0f3440"] },
+              "legend": { "title": "Loans per resident", "orient": "bottom", "direction": "horizontal" }
+            },
+            "order": { "field": "loans", "sort": "descending" },
+            "tooltip": [
+              { "field": "council", "title": "Council" },
+              { "field": "loans", "title": "Loans", "format": "," },
+              { "field": "population", "title": "Population", "format": "," },
+              { "field": "loans_per_resident", "title": "Loans per resident", "format": ".1f" }
+            ]
+          }
+        },
+        {
+          "data": {
+            "url": "data/nsw_council_loans.csv",
+            "format": { "type": "csv", "parse": { "lon": "number", "lat": "number", "loans_per_resident": "number" } }
+          },
+          "transform": [
+            { "filter": "datum.council === 'Byron' || datum.council === 'Walgett'" },
+            { "calculate": "[datum.council + ':', format(datum.loans_per_resident, '.1f') + ' loans per resident']", "as": "label" }
+          ],
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          },
+          "layer": [
+            { "mark": { "type": "text", "align": "right", "dx": -14, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "stroke": "#faf7f2", "strokeWidth": 3 } },
+            { "mark": { "type": "text", "align": "right", "dx": -14, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "color": "#1f2328" } }
+          ]
+        },
+        {
+          "data": { "values": [{ "lon": 151.5, "lat": -34.95, "label": ["Greater Sydney:", "see the inset →"] }] },
+          "mark": { "type": "text", "align": "left", "baseline": "top", "fontSize": 12, "lineHeight": 14, "color": "#555b63" },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          }
+        }
+      ]
+    },
+    {
+      "width": 400,
+      "height": 420,
+      "title": { "text": "Greater Sydney", "fontSize": 14, "font": "Source Sans 3", "fontWeight": 700, "subtitle": "Same circle sizes and colours as the main map", "subtitleFontSize": 12 },
+      "projection": { "type": "conicEqualArea", "parallels": [-18, -36], "rotate": [-132, 0] },
+      "layer": [
+        {
+          "data": { "url": "data/geo/nsw_lga.geojson", "format": { "type": "json", "property": "features" } },
+          "transform": [{ "filter": "datum.properties.sydney" }],
+          "mark": { "type": "geoshape", "fill": "#ece6dc", "stroke": "#faf7f2", "strokeWidth": 1 }
+        },
+        {
+          "data": {
+            "url": "data/nsw_council_loans.csv",
+            "format": { "type": "csv", "parse": { "population": "number", "loans": "number", "loans_per_resident": "number", "lon": "number", "lat": "number", "sydney": "boolean" } }
+          },
+          "transform": [{ "filter": "datum.sydney" }],
+          "mark": { "type": "circle", "stroke": "#faf7f2", "strokeWidth": 0.8, "opacity": 0.92 },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "size": { "field": "loans", "type": "quantitative", "scale": { "domain": [0, 1700000], "range": [0, 1100] }, "legend": null },
+            "color": {
+              "field": "loans_per_resident",
+              "type": "quantitative",
+              "scale": { "type": "threshold", "domain": [2, 4, 6, 8], "range": ["#e3eeee", "#9cc3c8", "#4f8590", "#1d4e5f", "#0f3440"] },
+              "legend": null
+            },
+            "order": { "field": "loans", "sort": "descending" },
+            "tooltip": [
+              { "field": "council", "title": "Council" },
+              { "field": "loans", "title": "Loans", "format": "," },
+              { "field": "population", "title": "Population", "format": "," },
+              { "field": "loans_per_resident", "title": "Loans per resident", "format": ".1f" }
+            ]
+          }
+        },
+        {
+          "data": {
+            "url": "data/nsw_council_loans.csv",
+            "format": { "type": "csv", "parse": { "lon": "number", "lat": "number", "loans": "number", "loans_per_resident": "number" } }
+          },
+          "transform": [
+            { "filter": "indexof(['Lane Cove', 'Fairfield', 'Sydney'], datum.council) >= 0" },
+            {
+              "calculate": "datum.council === 'Sydney' ? ['City of Sydney:', format(datum.loans / 1e6, '.1f') + 'M loans, the most in NSW'] : [datum.council + ':', format(datum.loans_per_resident, '.1f') + ' loans per resident']",
+              "as": "label"
+            }
+          ],
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          },
+          "layer": [
+            {
+              "transform": [{ "filter": "datum.council === 'Lane Cove'" }],
+              "layer": [
+                { "mark": { "type": "text", "align": "left", "dx": 12, "dy": -22, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "stroke": "#faf7f2", "strokeWidth": 3 } },
+                { "mark": { "type": "text", "align": "left", "dx": 12, "dy": -22, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "color": "#1f2328" } }
+              ]
+            },
+            {
+              "transform": [{ "filter": "datum.council === 'Sydney'" }],
+              "layer": [
+                { "mark": { "type": "text", "align": "left", "dx": 22, "dy": 18, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "stroke": "#faf7f2", "strokeWidth": 3 } },
+                { "mark": { "type": "text", "align": "left", "dx": 22, "dy": 18, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "color": "#1f2328" } }
+              ]
+            },
+            {
+              "transform": [{ "filter": "datum.council === 'Fairfield'" }],
+              "layer": [
+                { "mark": { "type": "text", "align": "right", "dx": -16, "dy": 18, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "stroke": "#faf7f2", "strokeWidth": 3 } },
+                { "mark": { "type": "text", "align": "right", "dx": -16, "dy": 18, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "color": "#1f2328" } }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

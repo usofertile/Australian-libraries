@@ -1,0 +1,94 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C2 line chart: share of people who visited a library or archive, by age from 5-8 years to 75+, ABS 2021-22. Optional overlay: children's reading for pleasure.",
+  "title": {
+    "text": ["Library use peaks at storytime age", "and returns with kids"],
+    "subtitle": "% who visited a library or archive in the past 12 months, by age, 2021–22"
+  },
+  "data": {
+    "url": "data/abs_library_age.csv",
+    "format": { "type": "csv", "parse": { "order": "number", "rate": "number" } }
+  },
+  "params": [
+    {
+      "name": "showReading",
+      "value": false,
+      "bind": { "input": "checkbox", "name": "Add children's reading for pleasure " }
+    }
+  ],
+  "width": "container",
+  "height": 300,
+  "encoding": {
+    "x": {
+      "field": "age",
+      "type": "ordinal",
+      "sort": ["5–8", "9–11", "12–14", "15–17", "18–24", "25–34", "35–44", "45–54", "55–64", "65–74", "75+"],
+      "title": "Age (years)",
+      "axis": { "labelAngle": 0, "domain": false, "ticks": false, "labelPadding": 8 }
+    },
+    "y": {
+      "field": "rate",
+      "type": "quantitative",
+      "title": null,
+      "scale": { "domainMin": 0, "domainMax": { "expr": "showReading ? 80 : 40" } },
+      "axis": { "tickCount": 4, "labelExpr": "datum.value + '%'", "domain": false, "ticks": false }
+    }
+  },
+  "layer": [
+    {
+      "transform": [{ "filter": "datum.group === 'Persons' && datum.measure === 'Visited a library'" }],
+      "layer": [
+        { "mark": { "type": "line", "color": "#1d4e5f", "strokeWidth": 3 } },
+        {
+          "mark": { "type": "point", "filled": true, "size": 70, "color": "#1d4e5f", "opacity": 1 },
+          "encoding": {
+            "tooltip": [
+              { "field": "age", "title": "Age" },
+              { "field": "rate", "title": "Visited a library (%)", "format": ".1f" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "transform": [{ "filter": "showReading && datum.measure === 'Reads for pleasure'" }],
+      "layer": [
+        { "mark": { "type": "line", "color": "#7b5ea7", "strokeWidth": 2.5, "strokeDash": [6, 4] } },
+        {
+          "mark": { "type": "point", "filled": true, "size": 60, "color": "#7b5ea7", "opacity": 1 },
+          "encoding": {
+            "tooltip": [
+              { "field": "age", "title": "Age" },
+              { "field": "rate", "title": "Reads for pleasure (%)", "format": ".1f" }
+            ]
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.age === '12–14'" }],
+          "mark": { "type": "text", "align": "left", "dx": 10, "dy": 6, "fontSize": 12.5, "lineHeight": 15, "color": "#7b5ea7", "fontWeight": 600 },
+          "encoding": { "text": { "value": ["Reading for pleasure", "also drops at 12–14"] } }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          { "age": "35–44", "rate": 23.8, "label": ["Back with", "their own kids: 24%"] },
+          { "age": "65–74", "rate": 22.5, "label": ["Retirement", "23%"] }
+        ]
+      },
+      "mark": { "type": "text", "dy": -30, "fontSize": 12.5, "lineHeight": 15, "color": "#1f2328" },
+      "encoding": { "text": { "field": "label" } }
+    },
+    {
+      "data": { "values": [{ "age": "18–24", "rate": 18.2, "label": ["Drifting away", "in our twenties: 18%"] }] },
+      "mark": { "type": "text", "dy": 30, "fontSize": 12.5, "lineHeight": 15, "color": "#1f2328" },
+      "encoding": { "text": { "field": "label" } }
+    },
+    {
+      "data": { "values": [{ "age": "5–8", "rate": 37.0, "label": "Storytime years: 37%" }] },
+      "mark": { "type": "text", "align": "left", "dx": 12, "dy": -8, "fontSize": 12.5, "color": "#1f2328", "fontWeight": 700 },
+      "encoding": { "text": { "field": "label" } }
+    }
+  ]
+}

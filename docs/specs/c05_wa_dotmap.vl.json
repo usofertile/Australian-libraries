@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C5 dot map of Western Australia's public libraries, linked to a histogram of each library's straight-line distance from Perth (haversine formula). Brushing the histogram highlights libraries on the map.",
+  "title": {
+    "text": "232 libraries across Australia's largest state",
+    "subtitle": "Public libraries in Western Australia (mainland). Drag across the bars on the right to highlight libraries on the map."
+  },
+  "data": { "url": "data/wa_libraries.csv", "format": { "type": "csv", "parse": { "lat": "number", "lon": "number" } } },
+  "transform": [
+    {
+      "calculate": "2 * 6371 * asin(sqrt(pow(sin((datum.lat + 31.9523) * PI / 360), 2) + cos(datum.lat * PI / 180) * cos(-31.9523 * PI / 180) * pow(sin((datum.lon - 115.8613) * PI / 360), 2)))",
+      "as": "dist_km"
+    }
+  ],
+  "spacing": 40,
+  "hconcat": [
+    {
+      "width": 470,
+      "height": 620,
+      "projection": { "type": "conicEqualArea", "parallels": [-18, -36], "rotate": [-132, 0] },
+      "layer": [
+        {
+          "data": { "url": "data/geo/wa_lga.geojson", "format": { "type": "json", "property": "features" } },
+          "mark": { "type": "geoshape", "fill": "#ece6dc", "stroke": "#faf7f2", "strokeWidth": 0.6 }
+        },
+        {
+          "mark": { "type": "circle", "size": 36, "stroke": "#faf7f2", "strokeWidth": 0.6, "opacity": 0.9 },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "color": { "condition": { "param": "dist", "empty": true, "value": "#1d4e5f" }, "value": "#cfc8bc" },
+            "order": { "condition": { "param": "dist", "empty": true, "value": 1 }, "value": 0 },
+            "tooltip": [
+              { "field": "name", "title": "Library" },
+              { "field": "suburb", "title": "Town or suburb" },
+              { "field": "dist_km", "title": "Distance from Perth (km)", "format": ",.0f" }
+            ]
+          }
+        },
+        {
+          "data": { "values": [{ "lon": 115.8613, "lat": -31.9523, "label": "Perth" }] },
+          "mark": { "type": "text", "align": "right", "dx": -14, "fontSize": 13, "fontWeight": 700, "color": "#1f2328" },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          }
+        },
+        {
+          "transform": [
+            { "filter": "datum.name === 'Kununurra Public Library'" },
+            { "calculate": "['Kununurra:', format(datum.dist_km, ',.0f') + ' km from Perth']", "as": "label" }
+          ],
+          "mark": { "type": "text", "align": "right", "dx": -10, "dy": 4, "fontSize": 12.5, "lineHeight": 15, "fontWeight": 700, "color": "#1f2328" },
+          "encoding": {
+            "longitude": { "field": "lon", "type": "quantitative" },
+            "latitude": { "field": "lat", "type": "quantitative" },
+            "text": { "field": "label" }
+          }
+        }
+      ]
+    },
+    {
+      "spacing": 36,
+      "vconcat": [
+        {
+          "width": 320,
+          "height": 230,
+          "title": { "text": "Libraries by distance from Perth", "fontSize": 14, "font": "Source Sans 3", "fontWeight": 700, "subtitle": "Straight-line distance, 100 km bands", "subtitleFontSize": 12 },
+          "params": [{ "name": "dist", "select": { "type": "interval", "encodings": ["x"] } }],
+          "mark": { "type": "bar", "color": "#1d4e5f", "cornerRadiusTopLeft": 1, "cornerRadiusTopRight": 1 },
+          "encoding": {
+            "x": {
+              "field": "dist_km",
+              "type": "quantitative",
+              "bin": { "step": 100 },
+              "title": "km from Perth",
+              "axis": { "format": ",.0f", "values": [0, 500, 1000, 1500, 2000], "labelFlush": true, "domainColor": "#ddd5c8" }
+            },
+            "y": { "aggregate": "count", "type": "quantitative", "title": "Libraries", "axis": { "tickCount": 4, "domain": false, "ticks": false } },
+            "tooltip": [
+              { "field": "dist_km", "bin": { "step": 100 }, "title": "Distance (km)" },
+              { "aggregate": "count", "title": "Libraries" }
+            ]
+          }
+        },
+        {
+          "width": 320,
+          "height": 230,
+          "transform": [
+            { "calculate": "datum.dist_km <= 50 ? 1 : 0", "as": "near" },
+            { "calculate": "datum.dist_km > 1000 ? 1 : 0", "as": "far" },
+            {
+              "aggregate": [
+                { "op": "sum", "field": "near", "as": "near" },
+                { "op": "sum", "field": "far", "as": "far" },
+                { "op": "median", "field": "dist_km", "as": "median" },
+                { "op": "count", "as": "total" }
+              ]
+            }
+          ],
+          "layer": [
+            {
+              "transform": [{ "calculate": "[format(datum.near, 'd'), format(datum.median, ',.0f') + ' km', format(datum.far, 'd')]", "as": "big" }, { "flatten": ["big"] }, { "window": [{ "op": "row_number", "as": "row" }] }],
+              "mark": { "type": "text", "align": "right", "baseline": "middle", "font": "Fraunces", "fontSize": 30, "fontWeight": 600, "color": "#1d4e5f" },
+              "encoding": {
+                "x": { "value": 110 },
+                "y": { "field": "row", "type": "quantitative", "scale": { "domain": [0.5, 3.5], "reverse": true }, "axis": null },
+                "text": { "field": "big" }
+              }
+            },
+            {
+              "transform": [
+                {
+                  "calculate": "[['libraries within 50 km of Perth', '(' + format(datum.near / datum.total, '.0%') + ' of all libraries)'], ['median distance', 'from Perth'], ['libraries are more than', '1,000 km from Perth']]",
+                  "as": "small"
+                },
+                { "flatten": ["small"] },
+                { "window": [{ "op": "row_number", "as": "row" }] }
+              ],
+              "mark": { "type": "text", "align": "left", "baseline": "middle", "fontSize": 13, "lineHeight": 16, "color": "#1f2328" },
+              "encoding": {
+                "x": { "value": 124 },
+                "y": { "field": "row", "type": "quantitative" },
+                "text": { "field": "small" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

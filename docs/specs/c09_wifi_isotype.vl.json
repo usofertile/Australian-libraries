@@ -1,0 +1,72 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C9 isotype chart: Wi-Fi sessions versus library computer bookings in NSW public libraries, 2024-25. Each icon represents 500,000 sessions.",
+  "title": {
+    "text": "Most people now bring their own device",
+    "subtitle": "Internet sessions in NSW public libraries, 2024–25. Each icon = 500,000 sessions."
+  },
+  "data": {
+    "url": "data/nsw_internet_access.csv",
+    "format": { "type": "csv", "parse": { "sessions": "number" } }
+  },
+  "transform": [
+    { "calculate": "round(datum.sessions / 500000)", "as": "icons" },
+    { "calculate": "sequence(0, datum.icons)", "as": "idx" },
+    { "flatten": ["idx"] },
+    { "calculate": "datum.type === 'Wi-Fi sessions'", "as": "wifi" },
+    { "calculate": "datum.idx % 10", "as": "col" },
+    { "calculate": "floor(datum.idx / 10) + (datum.wifi ? 0 : 4.6)", "as": "row" }
+  ],
+  "width": "container",
+  "height": 300,
+  "encoding": {
+    "x": { "field": "col", "type": "quantitative", "axis": null, "scale": { "domain": [-0.6, 9.6] } },
+    "y": { "field": "row", "type": "quantitative", "axis": null, "scale": { "domain": [-1.3, 5.3], "reverse": true } }
+  },
+  "layer": [
+    {
+      "mark": { "type": "point", "filled": true, "size": 520, "opacity": 1, "strokeWidth": 0 },
+      "encoding": {
+        "shape": {
+          "field": "type",
+          "legend": null,
+          "scale": {
+            "domain": ["Wi-Fi sessions", "Library computer bookings"],
+            "range": [
+              "M-0.15,0.625 A0.15,0.15 0 1 0 0.15,0.625 A0.15,0.15 0 1 0 -0.15,0.625 Z M-0.424,0.201 A0.6,0.6 0 0 1 0.424,0.201 L0.247,0.378 A0.35,0.35 0 0 0 -0.247,0.378 Z M-0.707,-0.082 A1,1 0 0 1 0.707,-0.082 L0.53,0.095 A0.75,0.75 0 0 0 -0.53,0.095 Z M-0.99,-0.365 A1.4,1.4 0 0 1 0.99,-0.365 L0.813,-0.188 A1.15,1.15 0 0 0 -0.813,-0.188 Z",
+              "M-0.95,-0.75 H0.95 V0.35 H-0.95 Z M-0.8,-0.6 V0.2 H0.8 V-0.6 Z M-0.12,0.35 H0.12 V0.6 H-0.12 Z M-0.45,0.6 H0.45 V0.75 H-0.45 Z"
+            ]
+          }
+        },
+        "color": {
+          "field": "type",
+          "legend": null,
+          "scale": { "domain": ["Wi-Fi sessions", "Library computer bookings"], "range": ["#d08a2e", "#1d4e5f"] }
+        },
+        "tooltip": [
+          { "field": "type", "title": "Type" },
+          { "field": "sessions", "title": "Sessions", "format": "," }
+        ]
+      }
+    },
+    {
+      "transform": [
+        { "filter": "datum.idx === 0" },
+        { "calculate": "format(datum.sessions / 1e6, '.1f') + (datum.wifi ? ' million Wi-Fi sessions' : ' million library computer bookings')", "as": "label" },
+        { "calculate": "datum.wifi ? -1 : 3.6", "as": "label_row" }
+      ],
+      "mark": { "type": "text", "align": "left", "baseline": "middle", "dx": -10, "fontSize": 14, "fontWeight": 700 },
+      "encoding": {
+        "x": { "datum": -0.6 },
+        "y": { "field": "label_row", "type": "quantitative" },
+        "text": { "field": "label" },
+        "color": { "condition": { "test": "datum.wifi", "value": "#a8681c" }, "value": "#1d4e5f" }
+      }
+    },
+    {
+      "data": { "values": [{ "col": 4.1, "row": 4.6, "label": ["About six Wi-Fi sessions", "for every computer booking"] }] },
+      "mark": { "type": "text", "align": "left", "baseline": "middle", "fontSize": 13, "lineHeight": 16, "color": "#1f2328" },
+      "encoding": { "text": { "field": "label" } }
+    }
+  ]
+}

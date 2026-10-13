@@ -1,0 +1,9 @@
+state,state_name,tile_col,tile_row,adults,children
+NSW,New South Wales,2,1,18.8,29.6
+Vic.,Victoria,2,2,18.1,27.7
+Qld,Queensland,2,0,22.8,38.7
+SA,South Australia,1,1,24.7,37.1
+WA,Western Australia,0,1,23.0,42.6
+Tas.,Tasmania,2,3,22.9,37.5
+NT,Northern Territory,1,0,21.9,41.8
+ACT,Australian Capital Territory,3,1,19.1,28.6

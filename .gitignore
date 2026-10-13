@@ -1,0 +1,15 @@
+# Raw shapefiles are ~55 MB each: too large for GitHub and for a fast-loading page.
+# Convert them to simplified TopoJSON (e.g. with mapshaper.org) and save the
+# result in docs/data/ instead.
+docs/data/Local Government Areas - 2025 - Shapefile/
+docs/data/States and Territories - 2021 - Shapefile/
+*.shp
+*.shx
+*.dbf
+
+# Office / OS clutter
+~$*
+*.tmp
+desktop.ini
+Thumbs.db
+.DS_Store

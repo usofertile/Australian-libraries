@@ -1,0 +1,101 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C3 butterfly chart: share of men and women who visited a library or archive, by age, people aged 15 and over, ABS 2021-22.",
+  "title": {
+    "text": "Women visit more than men at every age",
+    "subtitle": [
+      "% who visited a library or archive in the past 12 months, people aged 15+, 2021–22.",
+      "The gap is widest in the teenage and parenting years."
+    ]
+  },
+  "data": {
+    "url": "data/abs_library_age.csv",
+    "format": { "type": "csv", "parse": { "order": "number", "rate": "number" } }
+  },
+  "transform": [{ "filter": "datum.group === 'Males' || datum.group === 'Females'" }],
+  "spacing": 0,
+  "hconcat": [
+    {
+      "title": { "text": "Men", "fontSize": 13, "color": "#6b7a8f", "anchor": "end", "font": "Source Sans 3", "fontWeight": 700, "offset": 6 },
+      "transform": [{ "filter": "datum.group === 'Males'" }],
+      "width": 190,
+      "height": 260,
+      "encoding": {
+        "y": { "field": "age", "type": "ordinal", "sort": { "field": "order" }, "axis": null },
+        "x": { "field": "rate", "type": "quantitative", "scale": { "domain": [0, 36], "reverse": true }, "axis": null }
+      },
+      "layer": [
+        {
+          "transform": [{ "filter": "datum.age === '15–17' || datum.age === '35–44'" }],
+          "mark": { "type": "rect", "color": "#f1ece3" },
+          "encoding": { "x": { "datum": 0 }, "x2": { "datum": 36 } }
+        },
+        {
+          "mark": { "type": "bar", "color": "#8a9bb0", "cornerRadiusTopLeft": 2, "cornerRadiusBottomLeft": 2, "height": { "band": 0.7 } },
+          "encoding": {
+            "tooltip": [
+              { "field": "age", "title": "Age" },
+              { "field": "rate", "title": "Men who visited (%)", "format": ".1f" }
+            ]
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "right", "dx": -4, "fontSize": 11.5, "color": "#555b63" },
+          "encoding": { "text": { "field": "rate", "format": ".0f" } }
+        },
+        {
+          "transform": [{ "filter": "datum.age === '15–17' || datum.age === '35–44'" }],
+          "mark": { "type": "text", "align": "left", "dx": 4, "dy": -7, "fontSize": 12, "lineHeight": 14, "fontWeight": 700, "color": "#1f2328" },
+          "encoding": { "x": { "datum": 36 }, "text": { "condition": { "test": "datum.age === '15–17'", "value": ["Teenage", "years"] }, "value": ["Parenting", "years"] } }
+        }
+      ]
+    },
+    {
+      "transform": [{ "filter": "datum.group === 'Males'" }],
+      "width": 52,
+      "height": 260,
+      "encoding": { "y": { "field": "age", "type": "ordinal", "sort": { "field": "order" }, "axis": null } },
+      "layer": [
+        {
+          "transform": [{ "filter": "datum.age === '15–17' || datum.age === '35–44'" }],
+          "mark": { "type": "rect", "color": "#f1ece3" },
+          "encoding": { "x": { "datum": 0, "type": "quantitative", "scale": { "domain": [0, 1] }, "axis": null }, "x2": { "datum": 1 } }
+        },
+        {
+          "mark": { "type": "text", "fontSize": 12, "fontWeight": 600, "color": "#1f2328" },
+          "encoding": { "text": { "field": "age" } }
+        }
+      ]
+    },
+    {
+      "title": { "text": "Women", "fontSize": 13, "color": "#1d4e5f", "anchor": "start", "font": "Source Sans 3", "fontWeight": 700, "offset": 6 },
+      "transform": [{ "filter": "datum.group === 'Females'" }],
+      "width": 190,
+      "height": 260,
+      "encoding": {
+        "y": { "field": "age", "type": "ordinal", "sort": { "field": "order" }, "axis": null },
+        "x": { "field": "rate", "type": "quantitative", "scale": { "domain": [0, 36] }, "axis": null }
+      },
+      "layer": [
+        {
+          "transform": [{ "filter": "datum.age === '15–17' || datum.age === '35–44'" }],
+          "mark": { "type": "rect", "color": "#f1ece3" },
+          "encoding": { "x": { "datum": 0 }, "x2": { "datum": 36 } }
+        },
+        {
+          "mark": { "type": "bar", "color": "#1d4e5f", "cornerRadiusTopRight": 2, "cornerRadiusBottomRight": 2, "height": { "band": 0.7 } },
+          "encoding": {
+            "tooltip": [
+              { "field": "age", "title": "Age" },
+              { "field": "rate", "title": "Women who visited (%)", "format": ".1f" }
+            ]
+          }
+        },
+        {
+          "mark": { "type": "text", "align": "left", "dx": 4, "fontSize": 11.5, "color": "#555b63" },
+          "encoding": { "text": { "field": "rate", "format": ".0f" } }
+        }
+      ]
+    }
+  ]
+}

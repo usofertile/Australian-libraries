@@ -1,0 +1,30 @@
+state,state_abbr,year,breakdown,category,sessions,attendance,population
+New South Wales,NSW,2024-25,total,All programs,108152,1888754,8476563
+New South Wales,NSW,2024-25,online,Online programs (views),673,64606,8476563
+New South Wales,NSW,2024-25,audience,Early childhood,35206,905239,8476563
+New South Wales,NSW,2024-25,audience,Children,18486,297252,8476563
+New South Wales,NSW,2024-25,audience,Young adults,3485,45978,8476563
+New South Wales,NSW,2024-25,audience,Adults,28313,297212,8476563
+New South Wales,NSW,2024-25,audience,Seniors,9672,77885,8476563
+New South Wales,NSW,2024-25,audience,Aboriginal & Torres Strait Islander,296,9611,8476563
+New South Wales,NSW,2024-25,audience,Culturally & linguistically diverse,4381,59044,8476563
+New South Wales,NSW,2024-25,audience,All ages,8313,196533,8476563
+New South Wales,NSW,2024-25,purpose,Literacy & lifelong learning,51850,1151220,8476563
+New South Wales,NSW,2024-25,purpose,Informed & connected citizens,5890,115343,8476563
+New South Wales,NSW,2024-25,purpose,Digital inclusion,9645,44773,8476563
+New South Wales,NSW,2024-25,purpose,Personal development & wellbeing,18964,255053,8476563
+New South Wales,NSW,2024-25,purpose,Stronger & creative communities,10554,191441,8476563
+New South Wales,NSW,2024-25,purpose,Economic & workforce development,573,9766,8476563
+Victoria,VIC,2022-23,total,All programs,,1714286,6619863
+Victoria,VIC,2023-24,total,All programs,,2010143,6815441
+Victoria,VIC,2024-25,total,All programs,,2139068,6978719
+Queensland,QLD,2024-25,total,All programs,67808,1508407,5437161
+Queensland,QLD,2024-25,audience,Children 0–5,30049,874932,5437161
+Queensland,QLD,2024-25,audience,Children 6–12,12170,275446,5437161
+Queensland,QLD,2024-25,audience,Young adults 13–17,1626,18526,5437161
+Queensland,QLD,2024-25,purpose,Literacy & lifelong learning,6018,93418,5437161
+Queensland,QLD,2024-25,purpose,Informed & connected citizens,3156,56715,5437161
+Queensland,QLD,2024-25,purpose,Digital inclusion,6384,40433,5437161
+Queensland,QLD,2024-25,purpose,Personal development & wellbeing,5686,103377,5437161
+Queensland,QLD,2024-25,purpose,Stronger & creative communities,2422,40804,5437161
+Queensland,QLD,2024-25,purpose,Economic & workforce development,297,4756,5437161

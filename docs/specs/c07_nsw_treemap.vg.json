@@ -1,0 +1,141 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "C7 treemap (Vega): NSW public library loans in 2024-25 by type of item, grouped into children's and teen books, adult books, digital items and other items. Rectangle area is proportional to loans.",
+  "title": {
+    "text": "Children's books are the biggest thing libraries lend",
+    "subtitle": "35.2 million loans in NSW public libraries, 2024–25, by type of item (magazines excluded)",
+    "anchor": "start",
+    "frame": "group"
+  },
+  "autosize": "pad",
+  "height": 440,
+  "signals": [
+    {
+      "name": "width",
+      "init": "containerSize()[0] > 0 ? containerSize()[0] - 16 : 1000",
+      "on": [{ "events": "window:resize", "update": "containerSize()[0] > 0 ? containerSize()[0] - 16 : 1000" }]
+    }
+  ],
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/nsw_loans_treemap.csv",
+      "format": { "type": "csv", "parse": { "loans": "number", "total": "number", "share": "number" } },
+      "transform": [
+        { "type": "stratify", "key": "id", "parentKey": "parent" },
+        {
+          "type": "treemap",
+          "field": "loans",
+          "sort": { "field": "value", "order": "descending" },
+          "round": true,
+          "method": "squarify",
+          "ratio": 1.4,
+          "paddingInner": 4,
+          "paddingTop": 26,
+          "size": [{ "signal": "width" }, { "signal": "height" }]
+        }
+      ]
+    },
+    { "name": "groups", "source": "tree", "transform": [{ "type": "filter", "expr": "datum.depth === 1" }] },
+    { "name": "leaves", "source": "tree", "transform": [{ "type": "filter", "expr": "datum.depth === 2" }] }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": ["Children's & teen books", "Adult books", "Digital", "Other items"],
+      "range": ["#7b5ea7", "#1d4e5f", "#d08a2e", "#b8b2a7"]
+    }
+  ],
+  "marks": [
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": { "value": 0 },
+          "y": { "value": 16 },
+          "text": { "value": "How to read: each rectangle's area shows how many times that type of item was borrowed." },
+          "fontSize": { "value": 12 },
+          "fill": { "value": "#555b63" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": { "data": "groups" },
+      "encode": {
+        "update": {
+          "x": { "field": "x0" }, "y": { "field": "y0" }, "x2": { "field": "x1" }, "y2": { "field": "y1" },
+          "fill": { "signal": "indexof(datum.name, 'Children') === 0 ? '#7b5ea7' : datum.name === 'Adult books' ? '#1d4e5f' : datum.name === 'Digital' ? '#d08a2e' : '#8a8378'" },
+          "fillOpacity": { "value": 0.16 }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": { "data": "groups" },
+      "encode": {
+        "update": {
+          "x": { "signal": "datum.x0 + 6" },
+          "y": { "signal": "datum.y0 + 18" },
+          "text": { "signal": "datum.name + '  ' + format(datum.total / 1e6, '.1f') + 'M · ' + format(datum.share, '.0%')" },
+          "limit": { "signal": "datum.x1 - datum.x0 - 10" },
+          "fontSize": { "value": 13.5 },
+          "fontWeight": { "value": 700 },
+          "fill": { "value": "#1f2328" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": { "data": "leaves" },
+      "encode": {
+        "update": {
+          "x": { "field": "x0" }, "y": { "field": "y0" }, "x2": { "field": "x1" }, "y2": { "field": "y1" },
+          "fill": { "scale": "color", "field": "group" },
+          "stroke": { "value": "#faf7f2" },
+          "strokeWidth": { "value": 1 },
+          "tooltip": {
+            "signal": "{'Item': datum.name, 'Group': datum.group, 'Loans': format(datum.loans, ','), 'Share of all loans': format(datum.share, '.1%')}"
+          }
+        },
+        "hover": { "fillOpacity": { "value": 0.85 } }
+      }
+    },
+    {
+      "type": "text",
+      "from": { "data": "leaves" },
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": { "signal": "datum.x0 + 7" },
+          "y": { "signal": "datum.y0 + 18" },
+          "text": {
+            "signal": "datum.y1 - datum.y0 < 40 || datum.x1 - datum.x0 < 44 ? '' : datum.x1 - datum.x0 < 120 ? split(replace(datum.name, regexp(' ', 'g'), '|') + '|' + format(datum.loans / 1e6, '.1f') + 'M', '|') : [datum.name, format(datum.loans / 1e6, '.1f') + 'M']"
+          },
+          "lineHeight": { "value": 17 },
+          "fontSize": { "value": 13 },
+          "fontWeight": { "value": 600 },
+          "fill": { "signal": "datum.group === 'Digital' || datum.group === 'Other items' ? '#1f2328' : '#ffffff'" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": { "data": "leaves" },
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": { "signal": "datum.x0 + 7" },
+          "y": { "signal": "datum.y0 + 56" },
+          "text": { "signal": "datum.name === 'E-audiobooks' && datum.y1 - datum.y0 > 70 ? ['About 10 times as many', 'loans as CD audiobooks'] : ''" },
+          "limit": { "signal": "datum.x1 - datum.x0 - 12" },
+          "lineHeight": { "value": 15 },
+          "fontSize": { "value": 12 },
+          "fontStyle": { "value": "italic" },
+          "fill": { "value": "#1f2328" }
+        }
+      }
+    }
+  ]
+}

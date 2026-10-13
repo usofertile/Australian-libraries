@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C1 tile grid map: share of adults and children who visited a library or archive in the past 12 months, by state and territory, ABS 2021-22.",
+  "title": {
+    "text": "Children are library regulars in every state",
+    "subtitle": "% who visited a library or archive in the past 12 months, 2021–22"
+  },
+  "data": {
+    "url": "data/abs_library_state.csv",
+    "format": {
+      "type": "csv",
+      "parse": { "tile_col": "number", "tile_row": "number", "adults": "number", "children": "number" }
+    }
+  },
+  "params": [
+    {
+      "name": "group",
+      "value": "Children",
+      "bind": { "input": "radio", "options": ["Children", "Adults"], "name": "Show " }
+    }
+  ],
+  "transform": [
+    { "calculate": "group === 'Children' ? datum.children : datum.adults", "as": "rate" }
+  ],
+  "width": 460,
+  "height": 400,
+  "encoding": {
+    "x": { "field": "tile_col", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3] } },
+    "y": { "field": "tile_row", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3] } }
+  },
+  "layer": [
+    {
+      "mark": { "type": "rect", "cornerRadius": 6, "stroke": "#faf7f2", "strokeWidth": 5 },
+      "encoding": {
+        "color": {
+          "field": "rate",
+          "type": "quantitative",
+          "scale": { "domain": [15, 45], "range": ["#e3eeee", "#9cc3c8", "#4f8590", "#1d4e5f", "#0f3440"] },
+          "legend": null
+        },
+        "tooltip": [
+          { "field": "state_name", "type": "nominal", "title": "State" },
+          { "field": "children", "type": "quantitative", "title": "Children 5–14 (%)", "format": ".1f" },
+          { "field": "adults", "type": "quantitative", "title": "Adults 15+ (%)", "format": ".1f" }
+        ]
+      }
+    },
+    {
+      "mark": { "type": "text", "dy": -16, "fontSize": 13, "fontWeight": 600 },
+      "encoding": {
+        "text": { "field": "state", "type": "nominal" },
+        "color": { "condition": { "test": "datum.rate > 25", "value": "#ffffff" }, "value": "#1f2328" }
+      }
+    },
+    {
+      "mark": { "type": "text", "dy": 12, "fontSize": 26, "font": "Fraunces", "fontWeight": 600 },
+      "encoding": {
+        "text": { "field": "rate", "type": "quantitative", "format": ".0f" },
+        "color": { "condition": { "test": "datum.rate > 25", "value": "#ffffff" }, "value": "#1f2328" }
+      }
+    },
+    {
+      "data": { "values": [{}] },
+      "transform": [
+        {
+          "calculate": "group === 'Children' ? ['Western Australia leads:', '43% of children visited.', '', 'In every state, children', 'out-visit adults.'] : ['NSW (19%) and Victoria (18%)', 'are lowest for adults.', '', 'Both states had long', 'COVID lockdowns in 2021.']",
+          "as": "note"
+        }
+      ],
+      "mark": { "type": "text", "align": "left", "baseline": "top", "fontSize": 12.5, "lineHeight": 17, "color": "#1f2328" },
+      "encoding": {
+        "x": { "value": 350 },
+        "y": { "value": 214 },
+        "text": { "field": "note" }
+      }
+    }
+  ]
+}

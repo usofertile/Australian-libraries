@@ -1,0 +1,63 @@
+council,lga_name,group,population,visits,program_attendance,digital_loans,physical_loans,visits_pr,programs_pr,digital_pr,physical_pr
+Balonne Shire,Balonne,Rural Libraries Queensland,4345,25000,2480,5057,12123,5.75,0.57,1.16,2.79
+Banana Shire,Banana,Runs its own library service,14919,64700,5202,4660,55306,4.34,0.35,0.31,3.71
+Barcaldine Regional,Barcaldine,Rural Libraries Queensland,2894,6872,218,2876,6732,2.37,0.08,0.99,2.33
+Barcoo Shire,Barcoo,Rural Libraries Queensland,317,7202,218,132,301,22.72,0.69,0.42,0.95
+Blackall-Tambo Regional,Blackall Tambo,Rural Libraries Queensland,1953,5196,1395,2329,7060,2.66,0.71,1.19,3.61
+Boulia Shire,Boulia,Rural Libraries Queensland,478,2403,1010,1329,156,5.03,2.11,2.78,0.33
+Brisbane City,Brisbane,Runs its own library service,1323162,5386771,297282,2923066,6077043,4.07,0.22,2.21,4.59
+Bulloo Shire,Bulloo,Rural Libraries Queensland,346,582,519,156,298,1.68,1.5,0.45,0.86
+Bundaberg Regional,Bundaberg,Runs its own library service,104166,204875,19543,99957,461779,1.97,0.19,0.96,4.43
+Burdekin Shire,Burdekin,Runs its own library service,17020,33303,4688,6971,45892,1.96,0.28,0.41,2.7
+Burke Shire,Burke,Rural Libraries Queensland,438,80,40,53,36,0.18,0.09,0.12,0.08
+Cairns Regional,Cairns,Runs its own library service,175398,658510,58934,118016,548190,3.75,0.34,0.67,3.13
+Carpentaria Shire,Carpentaria,Rural Libraries Queensland,2212,550,598,615,1251,0.25,0.27,0.28,0.57
+Cassowary Coast Regional,Cassowary Coast,Runs its own library service,29972,183736,9804,34218,104179,6.13,0.33,1.14,3.48
+Central Highlands Regional,Central Highlands (Qld),Runs its own library service,28973,99232,27043,25117,35444,3.42,0.93,0.87,1.22
+Charters Towers Regional,Charters Towers,Rural Libraries Queensland,12013,32604,4568,8637,21582,2.71,0.38,0.72,1.8
+Cloncurry Shire,Cloncurry,Rural Libraries Queensland,3851,14222,3816,768,2969,3.69,0.99,0.2,0.77
+Cook Shire,Cook,Rural Libraries Queensland,4761,13855,1608,3019,16865,2.91,0.34,0.63,3.54
+Croydon Shire,Croydon,Rural Libraries Queensland,270,263,205,153,580,0.97,0.76,0.57,2.15
+Diamantina Shire,Diamantina,Rural Libraries Queensland,272,57,14,8,107,0.21,0.05,0.03,0.39
+Douglas Shire,Douglas,Rural Libraries Queensland,12828,69885,2955,11412,51203,5.45,0.23,0.89,3.99
+Etheridge Shire,Etheridge,Rural Libraries Queensland,726,350,19,698,1320,0.48,0.03,0.96,1.82
+Flinders Shire,Flinders (Qld),Rural Libraries Queensland,1544,9298,651,2461,2250,6.02,0.42,1.59,1.46
+Fraser Coast Regional,Fraser Coast,Runs its own library service,117940,245584,60441,145990,566209,2.08,0.51,1.24,4.8
+Gladstone Regional,Gladstone,Runs its own library service,66835,232374,26218,108866,257422,3.48,0.39,1.63,3.85
+Gold Coast City,Gold Coast,Runs its own library service,666087,1960489,151902,1675387,3489430,2.94,0.23,2.52,5.24
+Goondiwindi Regional,Goondiwindi,Rural Libraries Queensland,10452,28676,3419,10556,25196,2.74,0.33,1.01,2.41
+Gympie Regional,Gympie,Runs its own library service,56166,211780,28942,88091,448263,3.77,0.52,1.57,7.98
+Hinchinbrook Shire,Hinchinbrook,Rural Libraries Queensland,11118,29815,3904,6271,17417,2.68,0.35,0.56,1.57
+Ipswich City,Ipswich,Runs its own library service,251148,838936,86812,210303,1146489,3.34,0.35,0.84,4.56
+Isaac Regional,Isaac,Runs its own library service,23024,60766,13059,34551,31970,2.64,0.57,1.5,1.39
+Livingstone Shire,Livingstone,Runs its own library service,41906,102243,4469,47026,118756,2.44,0.11,1.12,2.83
+Lockyer Valley Regional,Lockyer Valley,Runs its own library service,43847,126483,10428,36608,109584,2.88,0.24,0.83,2.5
+Logan City,Logan,Runs its own library service,377773,998383,87517,448095,1789092,2.64,0.23,1.19,4.74
+Longreach Regional,Longreach,Rural Libraries Queensland,3737,8433,1197,3840,5092,2.26,0.32,1.03,1.36
+Mackay Regional,Mackay,Runs its own library service,126907,283848,23681,249347,543918,2.24,0.19,1.96,4.29
+Maranoa Regional,Maranoa,Rural Libraries Queensland,13255,40248,15868,12079,31962,3.04,1.2,0.91,2.41
+Mareeba Shire,Mareeba,Runs its own library service,23702,60343,7936,19077,65842,2.55,0.33,0.8,2.78
+McKinlay Shire,McKinlay,Rural Libraries Queensland,849,25278,1913,311,2908,29.77,2.25,0.37,3.43
+Moreton Bay Regional,Moreton Bay,Runs its own library service,510104,1351386,189303,951963,2573329,2.65,0.37,1.87,5.04
+Mount Isa City,Mount Isa,Runs its own library service,18945,16574,3549,5500,22780,0.87,0.19,0.29,1.2
+Murweh Shire,Murweh,Rural Libraries Queensland,3966,10701,1028,4777,15757,2.7,0.26,1.2,3.97
+Noosa Shire,Noosa,Runs its own library service,58367,245419,13572,142698,457199,4.2,0.23,2.44,7.83
+North Burnett Regional,North Burnett,Rural Libraries Queensland,10352,39329,2338,6048,21233,3.8,0.23,0.58,2.05
+Paroo Shire,Paroo,Rural Libraries Queensland,1725,9615,392,2063,4716,5.57,0.23,1.2,2.73
+Quilpie Shire,Quilpie,Rural Libraries Queensland,709,4549,1220,582,1760,6.42,1.72,0.82,2.48
+Redland City,Redland,Runs its own library service,166809,481927,42195,342792,1003281,2.89,0.25,2.05,6.01
+Richmond Shire,Richmond,Rural Libraries Queensland,781,724,389,317,268,0.93,0.5,0.41,0.34
+Rockhampton Regional,Rockhampton,Runs its own library service,84517,181906,67534,164678,278439,2.15,0.8,1.95,3.29
+Scenic Rim Regional,Scenic Rim,Runs its own library service,45248,154778,8318,52041,186720,3.42,0.18,1.15,4.13
+Somerset Regional,Somerset,Runs its own library service,26251,83873,9041,14953,70103,3.2,0.34,0.57,2.67
+South Burnett Regional,South Burnett,Runs its own library service,34290,152401,7154,28750,116331,4.44,0.21,0.84,3.39
+Southern Downs Regional,Southern Downs,Runs its own library service,37444,84975,4643,26572,171319,2.27,0.12,0.71,4.58
+Sunshine Coast Regional,Sunshine Coast,Runs its own library service,365942,911308,76892,985598,2328349,2.49,0.21,2.69,6.36
+Tablelands Regional,Tablelands,Runs its own library service,27259,86517,9649,44311,121393,3.17,0.35,1.63,4.45
+Toowoomba Regional,Toowoomba,Runs its own library service,181821,368807,24926,179154,864864,2.03,0.14,0.99,4.76
+Torres Shire,Torres,Rural Libraries Queensland,3502,25,0,193,1009,0.01,0.0,0.06,0.29
+Townsville City,Townsville,Runs its own library service,201433,378228,29963,232914,533252,1.88,0.15,1.16,2.65
+Weipa Town Authority,,Rural Libraries Queensland,4251,15382,5601,2345,8423,3.62,1.32,0.55,1.98
+Western Downs Regional,Western Downs,Runs its own library service,34991,130005,17356,40386,136139,3.72,0.5,1.15,3.89
+Whitsunday Regional,Whitsunday,Runs its own library service,39712,127090,17366,35982,126554,3.2,0.44,0.91,3.19
+Winton Shire,Winton,Rural Libraries Queensland,1138,26272,5462,1301,8914,23.09,4.8,1.14,7.83

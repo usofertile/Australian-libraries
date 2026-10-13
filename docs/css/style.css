@@ -1,0 +1,410 @@
+/* ==========================================================================
+   Checked Out? — FIT3179 Data Visualisation 2
+   12-column layout, max 1080 px content, three figure patterns:
+   full width, pair (6 + 6), and chart + sidebar (8 + 4).
+   ========================================================================== */
+
+:root {
+  /* Colour tokens (keep in sync with the chart theme in js/main.js) */
+  --paper:      #faf7f2;   /* page background, warm like book paper */
+  --paper-alt:  #f1ece3;   /* sidebars, conclusion band */
+  --ink:        #1f2328;   /* headings, body text */
+  --ink-soft:   #555b63;   /* captions, secondary text */
+  --rule:       #ddd5c8;   /* dividers */
+  --print:      #1d4e5f;   /* print / physical, default data colour */
+  --print-dark: #0f3440;
+  --digital:    #d08a2e;   /* digital: e-books, e-audio, Wi-Fi */
+  --digital-text: #a8681c; /* digital colour dark enough for text */
+  --young:      #7b5ea7;   /* children and early years */
+
+  /* Typography */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif;
+
+  /* Layout */
+  --wrap: 1080px;
+  --pad: 24px;
+  --gutter: 32px;
+  --measure: 66ch;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+/* ---------- Typography ---------- */
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  margin: 0;
+}
+
+h1 { font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 600; margin-bottom: 0.6rem; }
+
+h3 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+p { margin: 0 0 1rem; }
+
+.prose { max-width: var(--measure); }
+.prose p:last-child { margin-bottom: 0; }
+
+.standfirst {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin-bottom: 1.5rem;
+}
+
+a { color: var(--print); text-underline-offset: 0.15em; }
+a:hover { color: var(--digital-text); }
+
+strong { font-weight: 700; }
+
+code {
+  font-size: 0.88em;
+  background: var(--paper-alt);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+
+/* ---------- Top navigation ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(250, 247, 242, 0.94);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.topnav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+}
+
+.topnav__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.topnav__links {
+  display: flex;
+  gap: 1.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.topnav__links a { color: var(--ink-soft); text-decoration: none; }
+.topnav__links a:hover { color: var(--print); }
+
+/* ---------- Hero ---------- */
+
+.hero { padding: 88px 0 72px; border-bottom: 1px solid var(--rule); }
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--digital-text);
+  margin-bottom: 1rem;
+}
+
+.hero .standfirst { margin-top: 1rem; font-size: 1.45rem; }
+
+.byline {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-bottom: 2.2rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  list-style: none;
+  margin: 3rem 0 0;
+  padding: 0;
+}
+
+.stat {
+  border-top: 3px solid var(--print);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat__number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--print);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.stat__number--digital { color: var(--digital-text); }
+.stat:nth-child(3) { border-top-color: var(--digital); }
+
+.stat__label { font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
+.stat__source { font-size: 0.85rem; color: var(--ink-soft); }
+
+/* ---------- Story sections ---------- */
+
+.story { padding: 96px 0; border-bottom: 1px solid var(--rule); }
+
+.section-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--digital-text);
+  letter-spacing: 0.08em;
+  margin: 0 0 0.4rem;
+}
+
+.bridge {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-soft);
+  margin: 56px 0 0;
+  max-width: 50ch;
+}
+
+/* ---------- Figure layouts ---------- */
+
+.figure {
+  margin: 48px 0;
+  min-width: 0;            /* lets grid children shrink */
+}
+
+.row {
+  display: grid;
+  gap: var(--gutter);
+  align-items: start;
+  margin: 48px 0;
+}
+
+.row .figure { margin: 0; }
+.row--b { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.row--c { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
+
+.chart {
+  width: 100%;
+  min-height: 120px;
+  overflow-x: auto;        /* fixed-width charts never force page-level scrolling */
+  overflow-y: hidden;
+}
+
+.chart .vega-embed {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;   /* put chart controls above the chart */
+}
+
+figcaption {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 78ch;
+}
+
+.source { display: block; margin-top: 0.3rem; font-size: 0.82rem; }
+
+.sidebar {
+  background: var(--paper-alt);
+  border-radius: 6px;
+  padding: 24px;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.sidebar__figure { margin-bottom: 0.4rem; }
+
+.sidebar__figure strong {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  color: var(--print);
+  margin-right: 0.3rem;
+}
+
+#community .sidebar__figure strong { color: var(--young); }
+.sidebar__source { font-size: 0.82rem; color: var(--ink-soft); margin: 0; }
+
+/* Chart controls (Vega-Lite bound inputs) */
+.vega-bindings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 0 0 12px;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.vega-bind { display: flex; align-items: center; gap: 6px; }
+.vega-bind-name { font-weight: 700; }
+.vega-bind label { margin-right: 12px; cursor: pointer; }
+.vega-bind input[type="radio"],
+.vega-bind input[type="checkbox"] { accent-color: var(--print); margin: 0 4px 0 0; }
+
+.vega-bind select {
+  font: inherit;
+  padding: 4px 8px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+}
+
+/* Tooltips */
+#vg-tooltip-element {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(31, 35, 40, 0.12);
+}
+
+#vg-tooltip-element table tr td.key { color: var(--ink-soft); }
+
+/* Error state (see js/main.js) */
+.chart--error {
+  border: 2px dashed #b3261e;
+  color: #b3261e;
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+/* ---------- Pull-quote band (strongest figure-ground contrast, used once) ---------- */
+
+.pullquote {
+  margin: 72px 0 0;
+  padding: 64px 0;
+  background: var(--print);
+  color: var(--paper);
+}
+
+.pullquote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.3;
+  max-width: 34ch;
+  margin: 0;
+}
+
+.pullquote strong { color: #f3c98b; }
+
+/* ---------- Conclusion ---------- */
+
+.story--conclusion { background: var(--paper-alt); }
+
+.takeaways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gutter);
+  list-style: none;
+  margin: 2rem 0 2.5rem;
+  padding: 0;
+}
+
+.takeaways h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0.6rem 0 0.4rem;
+}
+
+.takeaways p { font-size: 1.02rem; margin: 0; }
+
+.takeaway__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--print);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.takeaway__icon--digital { background: var(--digital); }
+.takeaway__icon--young { background: var(--young); }
+
+.closing {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1.45;
+  max-width: 48ch;
+  margin: 0;
+}
+
+/* ---------- Footer / metadata ---------- */
+
+.meta { padding: 72px 0 88px; font-size: 0.95rem; line-height: 1.6; color: var(--ink-soft); }
+
+.meta__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.meta h3 { color: var(--ink); margin-top: 1.6rem; }
+.meta h3:first-child { margin-top: 0; }
+
+.sources, .notes { padding-left: 1.1rem; margin: 0; }
+.sources li, .notes li { margin-bottom: 0.45rem; }
+
+.glossary { margin: 0; }
+.glossary dt { color: var(--ink); font-weight: 700; }
+.glossary dd { margin: 0 0 0.5rem; }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .row--b, .row--c, .meta__grid, .takeaways, .stats { grid-template-columns: minmax(0, 1fr); }
+  .topnav__links { display: none; }
+  .story { padding: 64px 0; }
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C8 index line chart: change in Victorian public library e-book loans, physical loans, members and physical collection compared with population, 2022-23 to 2024-25 (2022-23 = 100). Vision Australia excluded.",
+  "title": {
+    "text": ["E-book loans grew five times", "faster than print loans"],
+    "subtitle": "Victoria, change since 2022–23 (2022–23 = 100). 136 means 36% higher."
+  },
+  "data": {
+    "url": "data/vic_borrowing_trends.csv",
+    "format": { "type": "csv", "parse": { "value": "number", "index": "number" } }
+  },
+  "transform": [{ "calculate": "indexof(['2022-23', '2023-24', '2024-25'], datum.year)", "as": "step" }],
+  "width": "container",
+  "height": 320,
+  "encoding": {
+    "x": {
+      "field": "step",
+      "type": "quantitative",
+      "title": null,
+      "scale": { "domain": [0, 2.95] },
+      "axis": { "values": [0, 1, 2], "labelExpr": "['2022–23', '2023–24', '2024–25'][datum.value]", "grid": false, "domain": false, "ticks": false, "labelPadding": 8, "labelFlush": false }
+    },
+    "y": {
+      "field": "index",
+      "type": "quantitative",
+      "title": null,
+      "scale": { "domain": [90, 140] },
+      "axis": { "values": [90, 100, 110, 120, 130, 140], "domain": false, "ticks": false }
+    },
+    "color": {
+      "field": "measure",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": ["E-book loans", "Members", "Physical loans", "Population", "Physical collection"],
+        "range": ["#d08a2e", "#3d4a57", "#1d4e5f", "#a39d92", "#86b0b6"]
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": { "type": "line", "strokeCap": "round" },
+      "encoding": {
+        "strokeDash": {
+          "field": "measure",
+          "legend": null,
+          "scale": {
+            "domain": ["E-book loans", "Members", "Physical loans", "Population", "Physical collection"],
+            "range": [[1, 0], [1, 0], [1, 0], [5, 4], [1, 0]]
+          }
+        },
+        "strokeWidth": { "condition": { "test": "datum.measure === 'E-book loans'", "value": 4 }, "value": 2.2 },
+        "opacity": { "condition": { "param": "hover", "empty": true, "value": 1 }, "value": 0.2 }
+      }
+    },
+    {
+      "params": [{ "name": "hover", "select": { "type": "point", "fields": ["measure"], "on": "mouseover", "clear": "mouseout" } }],
+      "mark": { "type": "point", "filled": true, "size": 60, "opacity": 1 },
+      "encoding": {
+        "opacity": { "condition": { "param": "hover", "empty": true, "value": 1 }, "value": 0.2 },
+        "tooltip": [
+          { "field": "measure", "title": "Measure" },
+          { "field": "year", "title": "Year" },
+          { "field": "value", "title": "Value", "format": "," },
+          { "field": "index", "title": "Index (2022–23 = 100)", "format": ".1f" }
+        ]
+      }
+    },
+    {
+      "transform": [
+        { "filter": "datum.year === '2024-25'" },
+        { "calculate": "datum.measure + ' ' + format(datum.index, '.0f')", "as": "label" },
+        {
+          "calculate": "datum.measure === 'Physical loans' ? datum.index + 1.4 : datum.measure === 'Population' ? datum.index - 1.2 : datum.index",
+          "as": "label_y"
+        }
+      ],
+      "mark": { "type": "text", "align": "left", "dx": 10, "fontSize": 12.5, "fontWeight": 700 },
+      "encoding": {
+        "y": { "field": "label_y", "type": "quantitative" },
+        "text": { "field": "label" },
+        "opacity": { "condition": { "param": "hover", "empty": true, "value": 1 }, "value": 0.25 }
+      }
+    },
+    {
+      "data": { "values": [{ "step": 0, "index": 131, "label": ["Lines above the dashed population", "line grew faster than the population."] }] },
+      "mark": { "type": "text", "align": "left", "dx": 10, "fontSize": 12, "lineHeight": 15, "color": "#555b63" },
+      "encoding": { "text": { "field": "label" }, "color": { "value": "#555b63" } }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C10 waffle charts: of every 100 people attending public library programs in 2024-25, how many were in each audience group, NSW and Queensland. One square = 1% of attendances.",
+  "title": {
+    "text": "Under-fives fill about half of all library program seats",
+    "subtitle": "Of every 100 people at a public library program in 2024–25… (one square = 1 in 100)"
+  },
+  "data": {
+    "url": "data/library_programs_by_state.csv",
+    "format": { "type": "csv", "parse": { "sessions": "number", "attendance": "number", "population": "number" } }
+  },
+  "transform": [
+    {
+      "filter": "(datum.state_abbr === 'NSW' && datum.breakdown === 'audience') || (datum.state_abbr === 'QLD' && (datum.breakdown === 'audience' || datum.breakdown === 'purpose'))"
+    },
+    {
+      "calculate": "indexof(['Early childhood', 'Children 0–5'], datum.category) >= 0 ? 'Under 5' : indexof(['Children', 'Children 6–12'], datum.category) >= 0 ? 'School-age children' : indexof(['Young adults', 'Young adults 13–17'], datum.category) >= 0 ? 'Teens' : datum.category === 'Adults' ? 'Adults' : datum.category === 'Seniors' ? 'Seniors' : 'All ages and other'",
+      "as": "audience"
+    },
+    { "aggregate": [{ "op": "sum", "field": "attendance", "as": "attendance" }], "groupby": ["state", "audience"] },
+    { "calculate": "indexof(['Under 5', 'School-age children', 'Teens', 'Adults', 'Seniors', 'All ages and other'], datum.audience)", "as": "order" },
+    { "joinaggregate": [{ "op": "sum", "field": "attendance", "as": "total" }], "groupby": ["state"] },
+    { "window": [{ "op": "sum", "field": "attendance", "as": "cum" }], "groupby": ["state"], "sort": [{ "field": "order" }], "frame": [null, 0] },
+    { "calculate": "round((datum.cum - datum.attendance) / datum.total * 100)", "as": "start" },
+    { "calculate": "round(datum.cum / datum.total * 100)", "as": "end" },
+    { "calculate": "datum.end - datum.start", "as": "squares" },
+    { "filter": "datum.squares > 0" },
+    { "calculate": "sequence(datum.start, datum.end)", "as": "cell" },
+    { "flatten": ["cell"] },
+    { "calculate": "datum.cell % 10", "as": "col" },
+    { "calculate": "floor(datum.cell / 10)", "as": "row" }
+  ],
+  "facet": {
+    "column": {
+      "field": "state",
+      "type": "nominal",
+      "title": null,
+      "sort": ["New South Wales", "Queensland"],
+      "header": { "labelAnchor": "start", "labelPadding": 10 }
+    }
+  },
+  "spacing": 56,
+  "spec": {
+    "width": 250,
+    "height": 250,
+    "layer": [
+      {
+        "params": [{ "name": "aud", "select": { "type": "point", "fields": ["audience"], "on": "mouseover", "clear": "mouseout" } }],
+        "mark": { "type": "square", "size": 360, "opacity": 1 },
+        "encoding": {
+          "x": { "field": "col", "type": "ordinal", "axis": null },
+          "y": { "field": "row", "type": "ordinal", "axis": null },
+          "color": {
+            "field": "audience",
+            "type": "nominal",
+            "scale": {
+              "domain": ["Under 5", "School-age children", "Teens", "Adults", "Seniors", "All ages and other"],
+              "range": ["#5b3f8c", "#9579c4", "#cdbfe4", "#1d4e5f", "#86b0b6", "#d9d3c9"]
+            },
+            "legend": { "title": null, "orient": "bottom", "direction": "horizontal", "symbolType": "square", "labelFontSize": 12.5, "columns": 3, "columnPadding": 18 }
+          },
+          "opacity": { "condition": { "param": "aud", "empty": true, "value": 1 }, "value": 0.25 },
+          "tooltip": [
+            { "field": "state", "title": "State" },
+            { "field": "audience", "title": "Audience" },
+            { "field": "squares", "title": "Out of every 100 attendees" },
+            { "field": "attendance", "title": "Attendances", "format": "," }
+          ]
+        }
+      },
+      {
+        "transform": [
+          { "filter": "datum.audience === 'Under 5' && datum.cell === datum.start" },
+          { "calculate": "[datum.squares + ' in every 100 are under five', '(' + format(datum.attendance, ',') + ' attendances)']", "as": "label" }
+        ],
+        "mark": { "type": "text", "align": "left", "baseline": "top", "fontSize": 13, "lineHeight": 17, "fontWeight": 700, "color": "#5b3f8c" },
+        "encoding": { "x": { "value": 0 }, "y": { "value": 262 }, "text": { "field": "label" } }
+      }
+    ]
+  }
+}

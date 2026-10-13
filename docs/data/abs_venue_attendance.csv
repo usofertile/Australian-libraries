@@ -1,0 +1,92 @@
+venue,breakdown,group,order,rate
+Libraries,Income,Lowest,0,20.0
+Libraries,Income,Second,1,20.9
+Libraries,Income,Third,2,21.0
+Libraries,Income,Fourth,3,20.8
+Libraries,Income,Highest,4,21.1
+Libraries,Education,Postgraduate,7,30.8
+Libraries,Education,Graduate diploma,6,30.1
+Libraries,Education,Bachelor,5,26.3
+Libraries,Education,Diploma,4,21.9
+Libraries,Education,Certificate,3,14.7
+Libraries,Education,Year 12,2,17.2
+Libraries,Education,Year 11,1,19.8
+Libraries,Education,Year 10 or below,0,15.8
+Art galleries,Income,Lowest,0,10.5
+Art galleries,Income,Second,1,13.4
+Art galleries,Income,Third,2,16.7
+Art galleries,Income,Fourth,3,22.1
+Art galleries,Income,Highest,4,28.5
+Art galleries,Education,Postgraduate,7,32.2
+Art galleries,Education,Graduate diploma,6,33.7
+Art galleries,Education,Bachelor,5,27.0
+Art galleries,Education,Diploma,4,20.2
+Art galleries,Education,Certificate,3,12.1
+Art galleries,Education,Year 12,2,16.4
+Art galleries,Education,Year 11,1,14.1
+Art galleries,Education,Year 10 or below,0,8.1
+Museums,Income,Lowest,0,9.5
+Museums,Income,Second,1,12.8
+Museums,Income,Third,2,18.2
+Museums,Income,Fourth,3,21.6
+Museums,Income,Highest,4,25.5
+Museums,Education,Postgraduate,7,28.2
+Museums,Education,Graduate diploma,6,25.8
+Museums,Education,Bachelor,5,25.5
+Museums,Education,Diploma,4,18.4
+Museums,Education,Certificate,3,13.8
+Museums,Education,Year 12,2,14.4
+Museums,Education,Year 11,1,10.9
+Museums,Education,Year 10 or below,0,8.9
+Cinemas,Income,Lowest,0,26.7
+Cinemas,Income,Second,1,35.8
+Cinemas,Income,Third,2,44.4
+Cinemas,Income,Fourth,3,53.1
+Cinemas,Income,Highest,4,54.6
+Cinemas,Education,Postgraduate,7,48.8
+Cinemas,Education,Graduate diploma,6,51.2
+Cinemas,Education,Bachelor,5,51.3
+Cinemas,Education,Diploma,4,45.6
+Cinemas,Education,Certificate,3,39.5
+Cinemas,Education,Year 12,2,47.8
+Cinemas,Education,Year 11,1,42.8
+Cinemas,Education,Year 10 or below,0,33.4
+Live music,Income,Lowest,0,9.2
+Live music,Income,Second,1,11.5
+Live music,Income,Third,2,16.8
+Live music,Income,Fourth,3,21.7
+Live music,Income,Highest,4,26.3
+Live music,Education,Postgraduate,7,20.5
+Live music,Education,Graduate diploma,6,23.9
+Live music,Education,Bachelor,5,24.0
+Live music,Education,Diploma,4,19.9
+Live music,Education,Certificate,3,15.5
+Live music,Education,Year 12,2,18.8
+Live music,Education,Year 11,1,12.1
+Live music,Education,Year 10 or below,0,9.6
+Theatre,Income,Lowest,0,4.8
+Theatre,Income,Second,1,5.1
+Theatre,Income,Third,2,7.1
+Theatre,Income,Fourth,3,9.4
+Theatre,Income,Highest,4,13.4
+Theatre,Education,Postgraduate,7,13.1
+Theatre,Education,Graduate diploma,6,17.4
+Theatre,Education,Bachelor,5,11.6
+Theatre,Education,Diploma,4,8.5
+Theatre,Education,Certificate,3,5.1
+Theatre,Education,Year 12,2,6.4
+Theatre,Education,Year 11,1,5.9
+Theatre,Education,Year 10 or below,0,4.5
+Musicals & opera,Income,Lowest,0,3.0
+Musicals & opera,Income,Second,1,4.4
+Musicals & opera,Income,Third,2,5.6
+Musicals & opera,Income,Fourth,3,9.5
+Musicals & opera,Income,Highest,4,12.3
+Musicals & opera,Education,Postgraduate,7,11.8
+Musicals & opera,Education,Graduate diploma,6,13.3
+Musicals & opera,Education,Bachelor,5,10.4
+Musicals & opera,Education,Diploma,4,7.9
+Musicals & opera,Education,Certificate,3,4.2
+Musicals & opera,Education,Year 12,2,5.6
+Musicals & opera,Education,Year 11,1,5.2
+Musicals & opera,Education,Year 10 or below,0,3.6

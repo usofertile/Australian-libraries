@@ -1,0 +1,155 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "C11 sorted bar chart: percentage change in Victorian public library community-use measures between 2022-23 and 2024-25, compared with population growth. Vision Australia excluded.",
+  "title": { "text": "Libraries are becoming community meeting places", "subtitle": "Victoria, % change from 2022–23 to 2024–25. The dashed line shows population growth." },
+  "data": {
+    "url": "data/vic_library_community_trends.csv",
+    "format": {
+      "type": "csv",
+      "parse": { "value": "number" }
+    }
+  },
+  "transform": [
+    {
+      "pivot": "year",
+      "value": "value",
+      "groupby": ["metric"]
+    },
+    {
+      "filter": "isValid(datum['2022-23']) && isValid(datum['2024-25'])"
+    },
+    {
+      "calculate": "(datum['2024-25'] - datum['2022-23']) / datum['2022-23']",
+      "as": "change"
+    },
+    { "calculate": "datum.metric === 'Population' ? datum.change : null", "as": "pop_change" },
+    {
+      "joinaggregate": [
+        { "op": "max", "field": "pop_change", "as": "pop" }
+      ]
+    },
+    { "filter": "datum.metric !== 'Population'" },
+    { "calculate": "datum.change > datum.pop ? 'Grew faster than population' : datum.change >= 0 ? 'Grew, but slower than population' : 'Fell'", "as": "status" }
+  ],
+  "width": "container",
+  "height": { "step": 36 },
+  "encoding": {
+    "y": {
+      "field": "metric",
+      "type": "nominal",
+      "title": null,
+      "sort": { "field": "change", "op": "max", "order": "descending" },
+      "axis": { "domain": false, "ticks": false, "labelPadding": 10, "labelFontSize": 13, "labelColor": "#1f2328", "labelLimit": 260 }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": { "band": 0.66 },
+        "cornerRadiusEnd": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "change",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [-0.1, 0.9]
+          },
+          "axis": {
+            "format": "+.0%",
+            "values": [0, 0.25, 0.5, 0.75],
+            "domain": false,
+            "ticks": false
+          }
+        },
+        "color": {
+          "field": "status",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": ["Grew faster than population", "Grew, but slower than population", "Fell"],
+            "range": ["#1d4e5f", "#86b0b6", "#b8b2a7"]
+          }
+        },
+        "tooltip": [
+          { "field": "metric", "title": "Measure" },
+          { "field": "2022-23", "title": "2022–23", "format": "," },
+          { "field": "2024-25", "title": "2024–25", "format": "," },
+          { "field": "change", "title": "Change", "format": "+.1%" }
+        ]
+      }
+    },
+    {
+      "transform": [
+        { "filter": "datum.change >= 0" }
+      ],
+      "mark": { "type": "text", "align": "left", "dx": 6, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328" },
+      "encoding": {
+        "x": { "field": "change", "type": "quantitative" },
+        "text": { "field": "change", "format": "+.0%" }
+      }
+    },
+    {
+      "transform": [
+        { "filter": "datum.change < 0" }
+      ],
+      "mark": { "type": "text", "align": "right", "dx": -6, "fontSize": 12.5, "fontWeight": 700, "color": "#1f2328" },
+      "encoding": {
+        "x": { "field": "change", "type": "quantitative" },
+        "text": { "field": "change", "format": "+.0%" }
+      }
+    },
+    {
+      "transform": [
+        { "filter": "datum.metric === 'Meeting room hours booked'" },
+        {
+          "calculate": "'up from ' + format(datum['2022-23'], ',.0f') + ' to ' + format(datum['2024-25'], ',.0f') + ' hours a year'",
+          "as": "detail"
+        }
+      ],
+      "mark": { "type": "text", "align": "left", "dx": 50, "fontSize": 12.5, "color": "#555b63" },
+      "encoding": {
+        "x": { "field": "change", "type": "quantitative" },
+        "text": { "field": "detail" }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            { "op": "max", "field": "pop", "as": "pop" }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeDash": [4, 3],
+        "color": "#555b63",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "x": { "field": "pop", "type": "quantitative" },
+        "y": { "value": 0 },
+        "y2": { "value": "height" }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            { "op": "max", "field": "pop", "as": "pop" }
+          ]
+        },
+        { "calculate": "'Population ' + format(datum.pop, '+.0%')", "as": "label" }
+      ],
+      "mark": { "type": "text", "align": "left", "baseline": "bottom", "dx": 4, "dy": -4, "fontSize": 12, "color": "#555b63" },
+      "encoding": {
+        "x": { "field": "pop", "type": "quantitative" },
+        "y": { "value": 0 },
+        "text": { "field": "label" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checked Out? Australia's Public Libraries</title>
+  <meta name="description" content="How Australia's public libraries are changing, and who they serve. A data story built with Vega-Lite for FIT3179 Data Visualisation 2.">
+
+  <!-- Typography: Fraunces (display serif with a printed-book character) + Source Sans 3 (reading) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Vega / Vega-Lite / Vega-Embed (pinned versions) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+</head>
+<body>
+
+  <nav class="topnav" aria-label="Sections">
+    <div class="wrap topnav__inner">
+      <a class="topnav__title" href="#top">Checked Out?</a>
+      <ol class="topnav__links">
+        <li><a href="#who">01 Who</a></li>
+        <li><a href="#everyone">02 Everyone</a></li>
+        <li><a href="#reach">03 Reach</a></li>
+        <li><a href="#borrow">04 Borrowing</a></li>
+        <li><a href="#community">05 Community</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+    <div class="wrap">
+      <p class="kicker">FIT3179 Data Visualisation 2 · Australia</p>
+      <h1>Checked Out?</h1>
+      <p class="standfirst">How Australia's public libraries are changing, and who they serve.</p>
+      <p class="byline">By <span class="author">[Your full name]</span> · <time datetime="2026-10">October 2026</time></p>
+
+      <div class="prose">
+        <p>
+          Ask most Australians when they last borrowed a library book and many will say
+          &ldquo;at school&rdquo;. Yet in 2024–25, people in New South Wales, Victoria and
+          Queensland walked into their public libraries 69 million times.
+          Libraries haven't checked out. They've changed.
+        </p>
+      </div>
+
+      <ul class="stats" aria-label="Key numbers">
+        <li class="stat">
+          <span class="stat__number">69 million</span>
+          <span class="stat__label">library visits in a year: 3.3 for every resident</span>
+          <span class="stat__source">NSW, Victoria and Queensland, 2024–25</span>
+        </li>
+        <li class="stat">
+          <span class="stat__number">1 in 3</span>
+          <span class="stat__label">residents is a library member</span>
+          <span class="stat__source">6.9 million members, 2024–25</span>
+        </li>
+        <li class="stat">
+          <span class="stat__number stat__number--digital">1 in 4</span>
+          <span class="stat__label">loans in Victoria and Queensland is now digital</span>
+          <span class="stat__source">e-books, e-audiobooks and e-video, 2024–25</span>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ 01 WHO ============ -->
+    <section class="story" id="who">
+      <div class="wrap">
+        <p class="section-num">01</p>
+        <h2>Who walks through the door?</h2>
+        <p class="standfirst">
+          One in five adults and one in three children visited a library in 2021–22.
+          Who goes depends on your age, your gender and where you live.
+        </p>
+        <div class="prose">
+          <p>
+            Every few years the Australian Bureau of Statistics (ABS) asks Australians which
+            cultural venues they have visited. Children are the library's most loyal users:
+            in every state and territory, they are far more likely than adults to have been.
+          </p>
+        </div>
+
+        <div class="row row--c">
+          <figure class="figure">
+            <div class="chart" id="c01" role="img" aria-label="Tile map of the share of children and adults who visited a library, by state"></div>
+            <figcaption>
+              Children's visits are counted outside school hours. The ABS counts libraries and archives together.
+              <span class="source">Source: ABS, Cultural and Creative Activities, 2021–22 (tables 14 and 22).</span>
+            </figcaption>
+          </figure>
+          <aside class="sidebar">
+            <h3>How to read this map</h3>
+            <p>
+              Each square is a state or territory, drawn the same size so that the ACT and
+              Tasmania are as easy to compare as Western Australia. Darker squares mean a
+              higher share of people visited a library.
+            </p>
+            <p class="sidebar__figure"><strong>33%</strong> of Australian children aged 5–14</p>
+            <p class="sidebar__figure"><strong>20%</strong> of adults aged 15 and over</p>
+          </aside>
+        </div>
+
+        <div class="prose">
+          <p>
+            Library use follows the rhythm of life. It peaks in the storytime years, falls away
+            through the teens and twenties, and rises again when people have children of their
+            own and after they retire. At every age, women are more likely than men to visit.
+          </p>
+        </div>
+
+        <div class="row row--b">
+          <figure class="figure">
+            <div class="chart" id="c02" role="img" aria-label="Line chart of library visits by age group"></div>
+            <figcaption>
+              Ages 5–14 come from the ABS survey of children (visits outside school hours); ages 15
+              and over from the adult survey. Tick the box to compare children's reading for pleasure.
+              <span class="source">Source: ABS, Cultural and Creative Activities, 2021–22 (tables 9, 16 and 23).</span>
+            </figcaption>
+          </figure>
+          <figure class="figure">
+            <div class="chart" id="c03" role="img" aria-label="Butterfly chart comparing men and women who visited a library, by age"></div>
+            <figcaption>
+              The gap is widest for 15–17 year olds (34% vs 20%) and in the parenting years of 35–44 (30% vs 17%).
+              <span class="source">Source: ABS, Cultural and Creative Activities, 2021–22 (table 16).</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="bridge">Age and gender shape who visits. Income, surprisingly, does not.</p>
+      </div>
+    </section>
+
+    <!-- ============ 02 EVERYONE ============ -->
+    <section class="story" id="everyone">
+      <div class="wrap">
+        <p class="section-num">02</p>
+        <h2>Libraries are for everyone</h2>
+        <p class="standfirst">Most cultural outings cost money, and it shows. Libraries are the exception.</p>
+        <div class="prose">
+          <p>
+            Australians in the highest income group are almost three times as likely as those in
+            the lowest to visit an art gallery or a museum, and four times as likely to see a musical.
+            At the library the share barely moves: about one in five, whatever people earn.
+            Borrowing from a public library is free, and it shows in who walks in.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c04" role="img" aria-label="Heatmap of attendance at cultural venues by income group or education level"></div>
+          <figcaption>
+            Use the buttons to compare by household income or by highest level of education.
+            Income groups are fifths of households, from the lowest-earning 20% to the highest.
+            <span class="source">Source: ABS, Cultural and Creative Activities, 2021–22 (tables 19 and 20).</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <blockquote class="pullquote">
+        <div class="wrap">
+          <p>
+            The one gap is education: <strong>31%</strong> of people with a postgraduate degree
+            visit a library, compared with <strong>16%</strong> of those who left school at Year 10.
+          </p>
+        </div>
+      </blockquote>
+
+      <div class="wrap">
+        <p class="bridge">If libraries are for everyone, can everyone reach one?</p>
+      </div>
+    </section>
+
+    <!-- ============ 03 REACH ============ -->
+    <section class="story" id="reach">
+      <div class="wrap">
+        <p class="section-num">03</p>
+        <h2>Libraries reach every corner</h2>
+        <p class="standfirst">
+          From city branches to outback towns, public libraries stretch across the continent,
+          but how much people borrow varies hugely from place to place.
+        </p>
+        <div class="prose">
+          <p>
+            Western Australia shows the scale of the network. Three in ten of its public libraries
+            are within 50 km of Perth, yet the network stretches more than 2,000 km north to
+            Kununurra. Drag across the distance chart to see where each group of libraries sits.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c05" role="img" aria-label="Dot map of Western Australian public libraries linked to a histogram of distance from Perth"></div>
+          <figcaption>
+            Distances are straight lines from central Perth. Christmas Island and the Cocos (Keeling) Islands are not shown.
+            <span class="source">Source: State Library of Western Australia, WA Public Libraries (2021); ABS council boundaries, 2025.</span>
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            In NSW, borrowing per person varies more than ten-fold between councils. Lane Cove, on
+            Sydney's lower north shore, lends almost 16 items per resident a year; nearby Fairfield
+            lends fewer than two. Coastal regional councils such as Byron and Ballina rival the
+            busiest city libraries.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c06" role="img" aria-label="Proportional symbol map of NSW library loans by council with a Greater Sydney inset"></div>
+          <figcaption>
+            Circle area shows total loans; colour shows loans per resident. Some councils share libraries
+            with their neighbours, so very small councils can look unusually high or low.
+            <span class="source">Source: State Library of NSW, Public Library Statistics 2024–25 (table 2e); ABS council boundaries, 2025.</span>
+          </figcaption>
+        </figure>
+
+        <p class="bridge">So what are people borrowing?</p>
+      </div>
+    </section>
+
+    <!-- ============ 04 BORROWING ============ -->
+    <section class="story" id="borrow">
+      <div class="wrap">
+        <p class="section-num">04</p>
+        <h2>Print holds steady, digital grows faster</h2>
+        <p class="standfirst">
+          E-books are the fastest-growing part of library lending, but they are adding to print,
+          not replacing it.
+        </p>
+        <div class="prose">
+          <p>
+            Picture books and junior fiction alone make up one in three loans in NSW. Together,
+            children's and teen books are borrowed more often than books for adults.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c07" role="img" aria-label="Treemap of NSW library loans by type of item"></div>
+          <figcaption>
+            Hover over a rectangle for exact numbers. Small rectangles at bottom right are CD
+            audiobooks, music CDs, toys and games, and language kits.
+            <span class="source">Source: State Library of NSW, Public Library Statistics 2024–25 (tables 2b and 2c).</span>
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            Victoria's three years of data show the shift. E-book loans grew by 36% in two years,
+            five times faster than loans of physical items, while libraries trimmed their physical
+            collections. Inside the building, most internet sessions are now on visitors' own phones
+            and laptops, over the library's Wi-Fi.
+          </p>
+        </div>
+
+        <div class="row row--b">
+          <figure class="figure">
+            <div class="chart" id="c08" role="img" aria-label="Index line chart of Victorian library measures from 2022-23 to 2024-25"></div>
+            <figcaption>
+              Hover over a line to isolate it. Vision Australia, a statewide library for people with
+              print disability, is excluded so the years compare like with like.
+              <span class="source">Source: Public Libraries Victoria, Annual Statistical Survey 2022–23 to 2024–25.</span>
+            </figcaption>
+          </figure>
+          <figure class="figure">
+            <div class="chart" id="c09" role="img" aria-label="Isotype chart comparing Wi-Fi sessions with library computer bookings in NSW"></div>
+            <figcaption>
+              In Victoria, hours of Wi-Fi use in libraries rose 52% between 2022–23 and 2024–25.
+              <span class="source">Source: State Library of NSW, Public Library Statistics 2024–25 (table 20); Public Libraries Victoria.</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="bridge">Fewer people need a library computer. More need a place to learn and meet.</p>
+      </div>
+    </section>
+
+    <!-- ============ 05 COMMUNITY ============ -->
+    <section class="story" id="community">
+      <div class="wrap">
+        <p class="section-num">05</p>
+        <h2>More than books</h2>
+        <p class="standfirst">
+          Storytime, coding clubs, book groups and job help: libraries in NSW and Queensland ran
+          more than 175,000 program sessions in 2024–25, and the youngest Australians are their
+          biggest audience.
+        </p>
+
+        <div class="row row--c">
+          <figure class="figure">
+            <div class="chart" id="c10" role="img" aria-label="Waffle charts of library program attendance by audience in NSW and Queensland"></div>
+            <figcaption>
+              Hover over a colour to compare states. NSW and Queensland group programs differently, so
+              compare the children's categories rather than every square. &ldquo;All ages and other&rdquo;
+              includes family, multicultural and First Nations programs in NSW, and programs grouped by
+              purpose in Queensland.
+              <span class="source">Source: State Library of NSW; State Library of Queensland, 2024–25.</span>
+            </figcaption>
+          </figure>
+          <aside class="sidebar">
+            <h3>Early years, every week</h3>
+            <p class="sidebar__figure"><strong>15,700</strong> Victorian children</p>
+            <p>
+              attended an early-years session at their library each week in 2024–25, along with
+              about 12,500 parents and carers. Storytime and rhyme time build the language and
+              reading skills children take to school.
+            </p>
+            <p class="sidebar__source">Source: Public Libraries Victoria, 2024–25.</p>
+          </aside>
+        </div>
+
+        <div class="prose">
+          <p>
+            Libraries are also becoming places to meet. In Victoria, hours booked in library
+            meeting rooms rose by almost three-quarters in two years, local partnerships grew by
+            52% and book clubs by 43%: all far faster than the population.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c11" role="img" aria-label="Bar chart of percentage change in Victorian library community measures"></div>
+          <figcaption>
+            Vision Australia excluded.
+            <span class="source">Source: Public Libraries Victoria, Annual Statistical Survey 2022–23 to 2024–25.</span>
+          </figcaption>
+        </figure>
+
+        <div class="prose">
+          <p>
+            In the bush, the library matters even more. Queensland's small rural councils, supported
+            by Rural Libraries Queensland, record more visits and twice as many program attendances
+            per resident as councils that run their own library service, even though their residents
+            borrow fewer than half as many digital items.
+          </p>
+        </div>
+
+        <figure class="figure">
+          <div class="chart" id="c12" role="img" aria-label="Choropleth map of Queensland councils linked to a scatterplot of programs and digital loans per resident"></div>
+          <figcaption>
+            Diamonds show all councils in each group combined. Three outback shires record more than 20
+            visits per resident, probably boosted by visitors to these very small towns.
+            <span class="source">Source: State Library of Queensland, Queensland public libraries statistics 2024–25; ABS council boundaries, 2025.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ CONCLUSION ============ -->
+    <section class="story story--conclusion" id="conclusion">
+      <div class="wrap">
+        <h2>Libraries haven't checked out</h2>
+        <ol class="takeaways">
+          <li>
+            <span class="takeaway__icon" aria-hidden="true">1</span>
+            <h3>For everyone</h3>
+            <p>The only cultural venue used equally by every income group.</p>
+          </li>
+          <li>
+            <span class="takeaway__icon takeaway__icon--digital" aria-hidden="true">2</span>
+            <h3>Changing, not fading</h3>
+            <p>E-book loans rose 36% in two years, and print lending still grew.</p>
+          </li>
+          <li>
+            <span class="takeaway__icon takeaway__icon--young" aria-hidden="true">3</span>
+            <h3>A place to belong</h3>
+            <p>Under-fives fill about half of all program seats, and rural towns use their library as a meeting place.</p>
+          </li>
+        </ol>
+        <p class="closing">
+          If your last visit was at school, you're in good company: library visits drop sharply once school
+          ends. Your local library is probably busier, and more useful, than you remember.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ METADATA ============ -->
+  <footer class="meta">
+    <div class="wrap meta__grid">
+      <div>
+        <h3>Data sources</h3>
+        <ul class="sources">
+          <li>Australian Bureau of Statistics, <a href="https://www.abs.gov.au/statistics/people/people-and-communities/cultural-and-creative-activities/2021-22">Cultural and Creative Activities, 2021–22</a> (latest release).</li>
+          <li>State Library of NSW, <a href="https://pls.sl.nsw.gov.au/managing-my-library/public-library-statistics">Public Library Statistics 2024–25</a>.</li>
+          <li>Public Libraries Victoria, <a href="https://www.plv.org.au/resources/">Annual Statistical Survey, final datasets 2022–23 to 2024–25</a>.</li>
+          <li>State Library of Queensland, <a href="https://www.data.gov.au/data/dataset/slq-qld-public-libraries-annual-statistics1">Queensland public libraries annual statistics 2024–25</a> (council and branch data).</li>
+          <li>State Library of Western Australia, <a href="https://catalogue.data.wa.gov.au/dataset/wa-public-libraries">WA Public Libraries</a> (locations, 2021).</li>
+          <li>Australian Bureau of Statistics, <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/non-abs-structures/local-government-areas">Local Government Areas, ASGS Edition 3, 2025</a> (map boundaries, simplified).</li>
+        </ul>
+
+        <h3>About the data</h3>
+        <ul class="notes">
+          <li>ABS figures are from 2021–22, the latest release. NSW and Victoria had long COVID lockdowns in 2021.</li>
+          <li>The ABS counts libraries and archives together, and children's visits outside school hours only.</li>
+          <li>Victorian figures exclude Vision Australia so that the three years compare like with like.</li>
+          <li>NSW and Queensland classify library programs differently.</li>
+          <li>Per-resident figures for very small councils can be inflated by visitors or shared libraries.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Words used on this page</h3>
+        <dl class="glossary">
+          <dt>Loan</dt><dd>One item borrowed once, physical or digital.</dd>
+          <dt>Program</dt><dd>A library session such as storytime, a coding club or a seniors' tech class.</dd>
+          <dt>Per resident</dt><dd>A council's total divided by its population.</dd>
+          <dt>Index (2022–23 = 100)</dt><dd>100 is the 2022–23 level; 136 means 36% higher.</dd>
+          <dt>Rural Libraries Queensland</dt><dd>A State Library of Queensland program supporting the libraries of small rural councils.</dd>
+        </dl>
+
+        <h3>About this page</h3>
+        <p>
+          Created by <span class="author">[Your full name]</span> for FIT3179 Data Visualisation,
+          Monash University, October 2026. Charts built with
+          <a href="https://vega.github.io/vega-lite/">Vega-Lite</a> and
+          <a href="https://vega.github.io/vega/">Vega</a>; chart specifications and data are in the
+          <a href="https://github.com/usofertile/Australian-libraries">GitHub repository</a>
+          (<code>docs/specs</code> and <code>docs/data</code>). Typefaces: Fraunces and Source Sans 3
+          (SIL Open Font License). Wi-Fi and computer icons drawn for this page.
+        </p>
+        <h3>Use of generative AI</h3>
+        <p>
+          Claude (Anthropic), an AI assistant, was used to help process the data, write chart
+          specifications and page code, and draft and edit text. All data, charts and wording were
+          checked by the author.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
