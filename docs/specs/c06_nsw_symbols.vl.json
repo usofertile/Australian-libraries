@@ -18,6 +18,11 @@
           "mark": { "type": "geoshape", "fill": "#ece6dc", "stroke": "#faf7f2", "strokeWidth": 0.6 }
         },
         {
+          "data": { "url": "data/geo/nsw_outline.geojson", "format": { "type": "json", "property": "features" } },
+          "transform": [{ "filter": "!datum.properties.sydney" }],
+          "mark": { "type": "geoshape", "filled": false, "stroke": "#1f2328", "strokeOpacity": 0.4, "strokeWidth": 1 }
+        },
+        {
           "data": {
             "url": "data/nsw_council_loans.csv",
             "format": { "type": "csv", "parse": { "population": "number", "loans": "number", "loans_per_resident": "number", "lon": "number", "lat": "number" } }
@@ -94,6 +99,11 @@
           "data": { "url": "data/geo/nsw_lga.geojson", "format": { "type": "json", "property": "features" } },
           "transform": [{ "filter": "datum.properties.sydney" }],
           "mark": { "type": "geoshape", "fill": "#ece6dc", "stroke": "#faf7f2", "strokeWidth": 1 }
+        },
+        {
+          "data": { "url": "data/geo/nsw_outline.geojson", "format": { "type": "json", "property": "features" } },
+          "transform": [{ "filter": "datum.properties.sydney" }],
+          "mark": { "type": "geoshape", "filled": false, "stroke": "#1f2328", "strokeOpacity": 0.4, "strokeWidth": 1 }
         },
         {
           "data": {

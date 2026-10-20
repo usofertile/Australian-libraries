@@ -37,7 +37,7 @@ https://usofertile.github.io/Australian-libraries/sketch/sketch.pdf
 **Creation process:** Two Python scripts (`scripts/`) turn the source spreadsheets into small
 chart-ready CSV files. They read the ABS council shapefile directly, simplify the boundaries for
 three states into GeoJSON, and join council names to boundaries. Vision Australia is removed from
-the Victorian totals so the three years compare like with like. The page loads 646 KB of data in
+the Victorian totals so the three years compare like with like. The page loads 760 KB of data in
 total.
 
 ### iii. How: idioms and rationale
@@ -83,7 +83,7 @@ acknowledgement requirements.
 - [x] More than 10 charts; at least 8 advanced idioms
 - [x] Data combined from at least 2 sources, using the latest releases
 - [x] All charts built with Vega-Lite or Vega; specs readable in `docs/specs/`
-- [x] Total downloadable data under a few MB (646 KB)
+- [x] Total downloadable data under a few MB (760 KB)
 - [x] Single scrolling page, no buttons that swap sections
 - [x] Narrative text, annotations and glossary
 - [ ] Replace every `[Your full name]` placeholder (index.html ×2, README)

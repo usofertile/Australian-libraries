@@ -5,6 +5,7 @@ Requires: pandas, openpyxl, shapely (no GIS packages needed; the shapefile is re
 
 Outputs in docs/data/ (see STORYBOARD.md §7):
   geo/wa_lga.geojson, geo/nsw_lga.geojson, geo/qld_lga.geojson   simplified council boundaries
+  geo/wa_outline.geojson, geo/nsw_outline.geojson                 state (and Greater Sydney) outlines
   abs_library_state.csv      ABS library attendance by state (adults, children) + tile positions
   abs_library_age.csv        ABS library attendance by age and sex; children's reading for pleasure
   abs_venue_attendance.csv   ABS attendance at cultural venues by income and by education
@@ -23,6 +24,7 @@ from pathlib import Path
 import pandas as pd
 from shapely.geometry import LinearRing, MultiPolygon, Polygon, mapping
 from shapely.geometry.polygon import orient
+from shapely.ops import unary_union
 
 DATA = Path(__file__).resolve().parent.parent / "docs" / "data"
 GEO = DATA / "geo"
@@ -136,8 +138,20 @@ def write_geojson(lga, shapes, state, path, tolerance, min_area, extra=None, max
         if extra:
             props.update(extra(row, full))
         features.append({"type": "Feature", "properties": props, "geometry": geom})
-    path.write_text(json.dumps({"type": "FeatureCollection", "features": features}, separators=(",", ":")))
+    write_features(path, features)
     return features
+
+
+def outline(lga, shapes, keep, tolerance, min_area, max_lon=180, **props):
+    """One feature tracing the outer edge of the chosen councils, drawn over the map so its shape stands out."""
+    full = unary_union([rings_to_geometry(shapes[i]) for i in lga.index[keep] if shapes[i] is not None])
+    geom = mapping(simplify(full, tolerance, min_area, max_lon))
+    geom = {"type": geom["type"], "coordinates": rounded(geom["coordinates"], 3)}
+    return {"type": "Feature", "properties": props, "geometry": geom}
+
+
+def write_features(path, features):
+    path.write_text(json.dumps({"type": "FeatureCollection", "features": features}, separators=(",", ":")))
 
 
 def build_geo():
@@ -162,6 +176,13 @@ def build_geo():
         lambda row: 0.0012 if row.key in sydney_keys else 0.007, 0.0004, nsw_extra,
         max_lon=154,  # drops Lord Howe Island, 600 km offshore, so the mainland fills the map
     )
+
+    wa, nsw = lga.STE_NAME21 == "Western Australia", lga.STE_NAME21 == "New South Wales"
+    write_features(GEO / "wa_outline.geojson", [outline(lga, shapes, wa, 0.01, 0.002, name="Western Australia")])
+    write_features(GEO / "nsw_outline.geojson", [
+        outline(lga, shapes, nsw, 0.007, 0.0004, 154, name="New South Wales", sydney=False),
+        outline(lga, shapes, nsw & lga.key.isin(sydney_keys), 0.0012, 0.0004, name="Greater Sydney", sydney=True),
+    ])
     return lga, centroids, sydney_keys
 
 

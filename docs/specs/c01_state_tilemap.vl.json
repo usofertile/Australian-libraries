@@ -25,12 +25,12 @@
   "width": 460,
   "height": 400,
   "encoding": {
-    "x": { "field": "tile_col", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3] } },
-    "y": { "field": "tile_row", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3] } }
+    "x": { "field": "tile_col", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3], "paddingInner": 0.05 } },
+    "y": { "field": "tile_row", "type": "ordinal", "axis": null, "scale": { "domain": [0, 1, 2, 3], "paddingInner": 0.05 } }
   },
   "layer": [
     {
-      "mark": { "type": "rect", "cornerRadius": 6, "stroke": "#faf7f2", "strokeWidth": 5 },
+      "mark": { "type": "rect", "cornerRadius": 6, "stroke": "#1f2328", "strokeOpacity": 0.4, "strokeWidth": 1 },
       "encoding": {
         "color": {
           "field": "rate",
